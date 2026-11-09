@@ -134,6 +134,36 @@ textarea{width:100%;min-height:90px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .err{color:var(--red);font-size:13px;min-height:1em}
 .hide{display:none!important}
+/* 大屏展示 */
+#viewScreen{position:fixed;inset:0;z-index:30;background:#1f1a17;color:#f5efe3;overflow:auto;padding:1.6vw 3vw;font-size:clamp(14px,1.2vw,28px)}
+.scr-top{display:flex;align-items:center;gap:2vw;flex-wrap:wrap;margin-bottom:1.4vw}
+.scr-top .seal{width:3.4em;height:3.4em;font-size:1em}
+.scr-title{font-family:var(--serif);font-weight:900;font-size:2em;line-height:1.1;margin-right:auto}
+.scr-title small{display:block;font-size:.4em;font-weight:400;color:#c9bca8;font-family:var(--sans);margin-top:.3em}
+.scr-ctl{display:flex;gap:.6em;align-items:center;font-size:.8em;color:#c9bca8}
+.scr-ctl select,.scr-ctl button{font-size:1em;background:#2f2824;color:#f5efe3;border:1px solid #574b42;border-radius:.4em;padding:.3em .7em}
+.scr-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:2vw}
+@media(max-width:900px){.scr-grid{grid-template-columns:1fr}}
+.scr-card{background:#2a2420;border-radius:1em;padding:1.2em 1.4em}
+.scr-card h3{font-family:var(--serif);margin:0 0 .6em;font-size:1.25em;color:#e9c46a;font-weight:900}
+.scr-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw;margin-bottom:1.4vw}
+.scr-stat{background:#2a2420;border-radius:1em;padding:.9em 1.2em}
+.scr-stat .k{color:#c9bca8;font-size:.85em}
+.scr-stat .v{font-family:var(--serif);font-weight:900;font-size:2.4em;line-height:1.1}
+.scr-stat .v small{font-size:.4em;color:#c9bca8;font-weight:400}
+.scr-row{display:grid;grid-template-columns:2.2em 6em 1fr 4.2em;gap:.7em;align-items:center;padding:.28em 0;border-bottom:1px solid #3a322c}
+.scr-row .rk{font-family:var(--serif);font-weight:900;font-size:1.3em;text-align:center;color:#a99c8a}
+.scr-row.r1 .rk{color:#e9c46a} .scr-row.r2 .rk{color:#d6d6d6} .scr-row.r3 .rk{color:#d49a6a}
+.scr-row .nm{font-weight:700;font-size:1.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scr-bar{height:.75em;background:#3a322c;border-radius:99px;overflow:hidden}
+.scr-bar i{display:block;height:100%;background:linear-gradient(90deg,#3f6e52,#6fae7f);border-radius:99px;transition:width .6s}
+.scr-row .sc{font-family:var(--serif);font-weight:900;text-align:right;font-size:1.15em}
+.scr-story{display:grid;grid-template-columns:7.5em 1fr 5.5em;gap:.7em;align-items:center;padding:.3em 0;font-size:.95em}
+.scr-story .bar2{height:.7em;background:#3a322c;border-radius:99px;overflow:hidden;position:relative}
+.scr-story .bar2 i{display:block;height:100%;background:#e9c46a;border-radius:99px;transition:width .6s}
+.scr-story .num{text-align:right;color:#c9bca8;font-size:.9em}
+.scr-foot{margin-top:1.5vw;color:#8f8272;font-size:.75em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1em}
+.scr-empty{color:#a99c8a;text-align:center;padding:2em 0}
 .sus{color:var(--red);font-weight:700;font-size:12px;background:var(--red-soft);border-radius:99px;padding:1px 8px;white-space:nowrap}
 tr.sus-row{background:#fbeee9}
 .logctl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:14px;margin-bottom:10px}
@@ -171,6 +201,8 @@ td.t{font-variant-numeric:tabular-nums;color:#4d433a}
 
   <section id="viewQuiz" class="hide"></section>
 
+  <section id="viewScreen" class="hide"></section>
+
   <section id="viewScores" class="hide">
     <div class="hero" style="padding-bottom:0">
       <h2>班級累計成績</h2>
@@ -184,6 +216,7 @@ td.t{font-variant-numeric:tabular-nums;color:#4d433a}
       <span id="tLoginText" style="font-size:14px;color:var(--muted)">老師登入後可看作答紀錄、疑似亂答與易錯題分析</span>
       <input type="password" id="tLoginPw" placeholder="教師密碼" autocomplete="current-password" style="width:150px">
       <button class="btn" id="tLoginBtn" style="padding:6px 16px">登入</button>
+      <button class="btn red hide" id="screenBtn" style="padding:6px 16px">大屏展示</button>
       <button class="btn ghost hide" id="tLogoutBtn" style="padding:6px 16px">登出</button>
       <span class="err" id="tLoginErr"></span>
     </div>
@@ -569,7 +602,7 @@ function stripId(r){const o={...r};delete o.id;return o}
 async function initDb(){
   if(SHEET_API){
     mode="sheet"; setStatus(); await sheetRefresh();
-    pollTimer=setInterval(()=>{ if(view==="scores"&&!document.hidden) sheetRefresh(); },20000);
+    pollTimer=setInterval(()=>{ if((view==="scores"||view==="screen")&&!document.hidden) sheetRefresh(); },15000);
     return;
   }
   try{
@@ -606,7 +639,7 @@ $("changeMe").onclick=showLogin;
 $("teacherSkip").onclick=()=>{ $("loginMask").classList.add("hide"); go("scores"); if(mode==="sheet") sheetRefresh(); };
 
 /* ===================== 導覽 ===================== */
-function go(v){ view=v; if(v!=="quiz")current=null; render(); window.scrollTo(0,0); try{ if(v==="scores")history.replaceState(null,"","#scores"); else if(v==="home")history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
+function go(v){ view=v; if(v!=="quiz")current=null; render(); window.scrollTo(0,0); try{ if(v==="scores")history.replaceState(null,"","#scores"); else if(v==="screen")history.replaceState(null,"","#screen"); else if(v==="home")history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
 $("tabHome").onclick=()=>go("home");
 $("tabScores").onclick=()=>{ go("scores"); if(mode==="sheet") sheetRefresh(); };
 
@@ -614,13 +647,16 @@ function myRec(story){ if(!me)return null; return records.find(r=>r.id===keyOf(m
 
 function render(){
   $("meText").innerHTML = me ? `<b>${esc(me.cls)}</b> 班 ${esc(me.seat)} 號 <b>${esc(me.name)}</b>` : "尚未登記";
-  $("tabHome").classList.toggle("on",view!=="scores");
-  $("tabScores").classList.toggle("on",view==="scores");
+  $("tabHome").classList.toggle("on",view!=="scores"&&view!=="screen");
+  $("tabScores").classList.toggle("on",view==="scores"||view==="screen");
   $("viewHome").classList.toggle("hide",view!=="home");
   $("viewQuiz").classList.toggle("hide",view!=="quiz");
   $("viewScores").classList.toggle("hide",view!=="scores");
   if(view==="home")renderHome();
   if(view==="scores")renderScores();
+  $("viewScreen").classList.toggle("hide",view!=="screen");
+  document.body.style.overflow = view==="screen"?"hidden":"";
+  if(view==="screen")renderScreen();
 }
 
 function renderHome(){
@@ -752,7 +788,10 @@ function renderScores(){
   const full = mode!=="sheet" || isTeacher;
   $("tLogin").classList.toggle("hide", mode!=="sheet");
   $("tLoginPw").classList.toggle("hide", isTeacher); $("tLoginBtn").classList.toggle("hide", isTeacher); $("tLogoutBtn").classList.toggle("hide", !isTeacher);
-  $("tLoginText").textContent = isTeacher ? "✓ 已用老師身分登入" : "老師登入後可看作答紀錄、疑似亂答與易錯題分析";
+  $("screenBtn").classList.toggle("hide", !full);
+  $("tLogin").classList.toggle("hide", false && mode!=="sheet");
+  if(mode!=="sheet"){ $("tLoginText").textContent="本機模式"; $("tLoginPw").classList.add("hide"); $("tLoginBtn").classList.add("hide"); $("tLogoutBtn").classList.add("hide"); }
+  else $("tLoginText").textContent = isTeacher ? "✓ 已用老師身分登入" : "老師登入後可看作答紀錄、疑似亂答與易錯題分析";
   document.querySelectorAll(".tonly").forEach(el=>el.classList.toggle("hide", !full));
   $("stats").classList.toggle("hide", !full);
   if(!full) $("teacher").classList.add("hide");
@@ -879,6 +918,43 @@ $("tLoginBtn").onclick=async()=>{
 };
 $("tLoginPw").addEventListener("keydown",e=>{ if(e.key==="Enter") $("tLoginBtn").click(); });
 $("tLogoutBtn").onclick=()=>{ teacherPw=""; lsSet("mz_tpw",""); isTeacher=false; sheetRefresh(); };
+/* ===================== 大屏展示 ===================== */
+let screenCls=null, lastUpd=null;
+function renderScreen(){
+  const cl=classes();
+  if(!screenCls || !cl.includes(screenCls)) screenCls = ($("clsSel").value && cl.includes($("clsSel").value)) ? $("clsSel").value : (cl[0]||null);
+  const rs=records.filter(r=>String(r.cls)===screenCls);
+  const stu={};
+  rs.forEach(r=>{const o=stu[r.seat]||(stu[r.seat]={seat:r.seat,name:r.name,done:0,correct:0});o.done++;o.correct+=r.best;});
+  const list=Object.values(stu).sort((a,b)=>b.correct-a.correct||a.seat-b.seat);
+  const asked=rs.reduce((a,r)=>a+r.total,0), corr=rs.reduce((a,r)=>a+r.best,0);
+  const full=list.filter(x=>x.done===STORIES.length).length;
+  let rank=0,lastC=null;
+  const rows=list.slice(0,10).map((x,i)=>{ if(x.correct!==lastC){rank=i+1;lastC=x.correct}
+    return `<div class="scr-row r${rank}"><span class="rk">${rank}</span><span class="nm">${esc(x.name)}</span><span class="scr-bar"><i style="width:${x.correct/TOTAL_Q*100}%"></i></span><span class="sc">${x.correct}</span></div>`}).join("");
+  const stories=STORIES.map(s=>{const xs=rs.filter(r=>r.story===s.id); const p=xs.length?Math.round(xs.reduce((a,r)=>a+r.best/r.total,0)/xs.length*100):null;
+    return `<div class="scr-story"><span>${s.title}</span><span class="bar2"><i style="width:${list.length?xs.length/list.length*100:0}%"></i></span><span class="num">${xs.length} 人${p!=null?` · ${p}%`:""}</span></div>`}).join("");
+  $("viewScreen").innerHTML=`
+    <div class="scr-top"><div class="seal">孟</div>
+      <div class="scr-title">孟子文言閱讀挑戰<small>${screenCls?esc(screenCls)+" 班　即時成績":"等待作答中"}</small></div>
+      <div class="scr-ctl">班級 <select id="scrCls">${cl.map(c=>`<option ${c===screenCls?"selected":""}>${esc(c)}</option>`).join("")||"<option>—</option>"}</select>
+        <button id="scrFull">全螢幕</button><button id="scrExit">離開</button></div></div>
+    <div class="scr-stats">
+      <div class="scr-stat"><div class="k">參與人數</div><div class="v">${list.length}<small> 人</small></div></div>
+      <div class="scr-stat"><div class="k">十篇全部完成</div><div class="v">${full}<small> 人</small></div></div>
+      <div class="scr-stat"><div class="k">全班答對率</div><div class="v">${asked?Math.round(corr/asked*100):0}<small> %</small></div></div>
+    </div>
+    <div class="scr-grid">
+      <div class="scr-card"><h3>排行榜 前十名</h3>${rows||`<div class="scr-empty">還沒有同學交卷</div>`}</div>
+      <div class="scr-card"><h3>各篇完成人數 · 平均答對率</h3>${stories}</div>
+    </div>
+    <div class="scr-foot"><span>每 15 秒自動更新　累計答對滿分 ${TOTAL_Q} 題，每篇取最高分</span><span>更新時間 ${new Date().toLocaleTimeString("zh-TW",{hour12:false})}</span></div>`;
+  $("scrCls").onchange=e=>{screenCls=e.target.value;renderScreen()};
+  $("scrExit").onclick=()=>{ try{ if(document.fullscreenElement)document.exitFullscreen(); }catch(e){} go("scores"); };
+  $("scrFull").onclick=async()=>{ try{ if(!document.fullscreenElement) await document.documentElement.requestFullscreen(); else await document.exitFullscreen(); }catch(e){} };
+}
+$("screenBtn").onclick=()=>{ screenCls=$("clsSel").value||null; go("screen"); if(mode==="sheet") sheetRefresh(); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && view==="screen" && !document.fullscreenElement) go("scores"); });
 let clearArm=false;
 $("clearCls").onclick=async()=>{
   const cur=$("clsSel").value;
@@ -897,8 +973,9 @@ $("clearCls").onclick=async()=>{
 /* ===================== 啟動 ===================== */
 me = lsGet("mz_me",null);
 if(location.hash==="#scores")view="scores";
+if(location.hash==="#screen")view="screen";
 render();
-if(!me && view!=="scores")showLogin();
+if(!me && view!=="scores" && view!=="screen")showLogin();
 initDb();
 </script>
 </body>

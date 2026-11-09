@@ -49,6 +49,7 @@
 - 學生在「班級成績」只看得到排行榜。
 - 老師在「班級成績」頁輸入教師密碼登入後，才看得到作答紀錄（完成時間、用時、疑似亂答）、各篇答對率、易錯題，以及教師區。
 - 密碼由 Google 試算表那邊驗證，沒登入的人拿不到作答紀錄。
+- 老師登入後，按「大屏展示」可投影全班即時成績（排行榜前十名、各篇完成人數與答對率，每 15 秒自動更新；不顯示疑似亂答與用時）。直接網址：`https://littlejocelyn2-hfjh.github.io/mengzi-reading/#screen`
 - 老師直接看成績的網址：`https://littlejocelyn2-hfjh.github.io/mengzi-reading/#scores`
 
 ## 注意事項
