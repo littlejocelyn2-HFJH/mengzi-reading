@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>孟子文言閱讀挑戰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5efe3; --card:#fffdf8; --ink:#2a2420; --muted:#776b5f; --line:#e2d8c6;
+  --red:#a8382a; --red-soft:#f4e1da; --green:#3f6e52; --green-soft:#e0ece3; --gold:#b8892f;
+  --serif:"Noto Serif TC","Songti TC",serif; --sans:"Noto Sans TC","PingFang TC",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px 60px}
+header{border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:5}
+.hbar{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.seal{width:38px;height:38px;border-radius:6px;background:var(--red);color:#fff;font-family:var(--serif);font-weight:900;display:grid;place-items:center;font-size:20px;letter-spacing:0}
+.brand h1{font-family:var(--serif);font-size:20px;margin:0;font-weight:900;letter-spacing:.05em}
+.brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.02em}
+nav{display:flex;gap:4px;background:#ebe3d3;padding:4px;border-radius:10px}
+nav button{border:0;background:transparent;padding:6px 14px;border-radius:7px;color:var(--muted);font-weight:500}
+nav button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.me{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.me b{color:var(--ink)}
+.link{border:0;background:none;color:var(--red);padding:0;text-decoration:underline;font-size:14px}
+.status{font-size:12px;padding:2px 8px;border-radius:99px;background:#ebe3d3;color:var(--muted)}
+.status.ok{background:var(--green-soft);color:var(--green)}
+
+.hero{padding:34px 0 18px}
+.hero h2{font-family:var(--serif);font-size:30px;margin:0 0 6px;font-weight:900}
+.hero p{margin:0;color:var(--muted);max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:20px}
+.story{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;text-align:left;display:flex;flex-direction:column;gap:6px;transition:transform .15s,box-shadow .15s;color:inherit}
+.story:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(80,50,20,.08)}
+.story .no{font-family:var(--serif);color:var(--red);font-weight:900;font-size:13px;letter-spacing:.1em}
+.story .t{font-family:var(--serif);font-size:22px;font-weight:900;line-height:1.3}
+.story .src{font-size:13px;color:var(--muted)}
+.story .foot{margin-top:auto;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);border-top:1px dashed var(--line)}
+.badge{font-size:12px;padding:1px 8px;border-radius:99px;background:#ebe3d3}
+.badge.full{background:var(--green-soft);color:var(--green)}
+.badge.part{background:#f5ead0;color:#8a6420}
+
+/* quiz */
+.back{margin:22px 0 8px;border:0;background:none;color:var(--muted);padding:0}
+.quiz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:22px;align-items:start}
+@media(max-width:820px){.quiz{grid-template-columns:1fr}}
+.passage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto}
+@media(max-width:820px){.passage{position:static;max-height:none}}
+.passage .idiom{display:inline-block;font-size:12px;color:var(--red);border:1px solid var(--red);border-radius:4px;padding:0 6px;margin-bottom:6px}
+.passage h2{font-family:var(--serif);font-size:26px;margin:0;font-weight:900}
+.passage .src{color:var(--muted);font-size:14px;margin-bottom:14px}
+.text{font-family:var(--serif);font-size:19px;line-height:2.05;text-align:justify;letter-spacing:.02em}
+.text p{margin:0 0 .6em;text-indent:2em}
+.toggles{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#faf6ee;border-radius:99px;padding:4px 12px;font-size:14px;color:var(--ink)}
+.chip[disabled]{opacity:.45;cursor:not-allowed}
+.notes{margin-top:12px;font-size:14px;background:#faf6ee;border-radius:10px;padding:10px 14px}
+.notes div{padding:3px 0}
+.notes b{font-family:var(--serif);color:var(--red)}
+.trans{margin-top:12px;font-size:15px;background:var(--green-soft);border-radius:10px;padding:12px 14px;color:#2d4a38}
+
+.qs .lead{font-size:14px;color:var(--muted);margin:0 0 10px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.q .stem{font-weight:500;margin-bottom:10px}
+.q .stem .n{font-family:var(--serif);font-weight:900;color:var(--red);margin-right:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;margin-top:7px;color:inherit;line-height:1.5}
+.opt:hover:not([disabled]){border-color:#c9b9a0;background:#fdfaf3}
+.opt .L{font-family:var(--serif);font-weight:700;color:var(--muted);flex:none}
+.opt.sel{border-color:var(--ink);background:#f7f1e5}
+.opt.sel .L{color:var(--ink)}
+.opt.right{border-color:var(--green);background:var(--green-soft)}
+.opt.right .L{color:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.opt.wrong .L{color:var(--red)}
+.opt[disabled]{cursor:default}
+.exp{margin-top:10px;font-size:14px;border-left:3px solid var(--gold);padding:4px 0 4px 12px;color:#4d433a}
+.exp .v{font-weight:700;margin-right:4px}
+.exp .v.r{color:var(--green)} .exp .v.w{color:var(--red)}
+.btn{border:0;background:var(--ink);color:#fff;border-radius:10px;padding:11px 22px;font-weight:700}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.btn.red{background:var(--red)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hint{font-size:13px;color:var(--muted)}
+.result{background:var(--ink);color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.result .big{font-family:var(--serif);font-size:40px;font-weight:900;line-height:1}
+.result .big small{font-size:18px;opacity:.7}
+.result .msg{flex:1;min-width:180px}
+.result .saved{font-size:13px;opacity:.8}
+.code{margin-top:10px;background:#3b332d;border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:12px;word-break:break-all;user-select:all}
+
+/* scores */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px}
+.panel h3{font-family:var(--serif);margin:0 0 10px;font-size:19px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat .k{font-size:13px;color:var(--muted)}
+.stat .v{font-family:var(--serif);font-size:28px;font-weight:900}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}
+select,input[type=text],input[type=number],textarea{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;color:var(--ink)}
+.tablewrap{overflow-x:auto;margin:0 -4px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:640px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:12px}
+td.nm{text-align:left;font-weight:500}
+.rank{font-family:var(--serif);font-weight:900;color:var(--muted)}
+tr.top1 .rank{color:var(--gold)} tr.me-row{background:#fbf3dc}
+.cell{display:inline-block;width:22px;height:22px;border-radius:5px;font-size:11px;line-height:22px;color:#fff}
+.c0{background:#e6ded0;color:#a89c8b}
+.bars div{display:grid;grid-template-columns:96px 1fr 56px;gap:10px;align-items:center;font-size:14px;padding:4px 0}
+.bar{height:10px;background:#ece4d6;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.hard li{margin:6px 0}
+.hard .pct{color:var(--red);font-weight:700}
+details.teacher{margin-top:16px}
+details.teacher summary{cursor:pointer;color:var(--muted);font-size:14px}
+textarea{width:100%;min-height:90px}
+.empty{color:var(--muted);text-align:center;padding:30px 0}
+
+/* modal */
+.mask{position:fixed;inset:0;background:rgba(40,30,20,.45);display:grid;place-items:center;z-index:20;padding:18px}
+.modal{background:var(--card);border-radius:16px;padding:24px;width:100%;max-width:380px}
+.modal h3{font-family:var(--serif);margin:0 0 4px;font-size:22px}
+.modal p{margin:0 0 14px;color:var(--muted);font-size:14px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;font-size:14px}
+.field input{width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.err{color:var(--red);font-size:13px;min-height:1em}
+.hide{display:none!important}
+.sus{color:var(--red);font-weight:700;font-size:12px;background:var(--red-soft);border-radius:99px;padding:1px 8px;white-space:nowrap}
+tr.sus-row{background:#fbeee9}
+.logctl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:14px;margin-bottom:10px}
+.logctl input[type=number]{width:70px}
+td.t{font-variant-numeric:tabular-nums;color:#4d433a}
+.ptabs{display:flex;gap:4px;background:#efe7d8;padding:3px;border-radius:9px;margin:4px 0 14px;width:max-content}
+.ptabs button{border:0;background:transparent;padding:4px 14px;border-radius:7px;color:var(--muted);font-size:14px}
+.ptabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.comic{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.panel4{border:2px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.panel4 svg{display:block;width:100%;height:auto}
+.panel4 .cap{font-size:13px;line-height:1.45;padding:6px 8px;border-top:2px solid var(--ink);flex:1;background:#fffdf6}
+.panel4 .cap b{font-family:var(--serif);color:var(--red);margin-right:4px}
+.thumb{margin:-16px -16px 6px;border-bottom:1px solid var(--line);border-radius:12px 12px 0 0;overflow:hidden;line-height:0}
+.thumb svg{width:100%;height:auto;display:block}
+</style>
+</head>
+<body>
+<header>
+  <div class="hbar">
+    <div class="brand"><div class="seal">孟</div><div><h1>孟子文言閱讀挑戰</h1><small>十則短文 · 會考題型閱讀測驗</small></div></div>
+    <nav><button id="tabHome" class="on">篇章</button><button id="tabScores">班級成績</button></nav>
+    <div class="me"><span id="meText"></span><button class="link" id="changeMe">更換</button><span class="status" id="status">連線中…</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section id="viewHome">
+    <div class="hero">
+      <h2>讀孟子，練閱讀</h2>
+      <p>從「生於憂患，死於安樂」延伸，挑選十則孟子的寓言與故事，每則都附四格漫畫。每篇讀完回答 2～3 題，答完立刻看解析與白話大意；成績會累計到班級成績榜，每篇以最高分計。</p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="viewQuiz" class="hide"></section>
+
+  <section id="viewScores" class="hide">
+    <div class="hero" style="padding-bottom:0">
+      <h2>班級累計成績</h2>
+      <p>每位同學每篇取最高分加總。點選班級可切換。</p>
+    </div>
+    <div class="toolbar">
+      <label>班級 <select id="clsSel"></select></label>
+      <span class="hint" id="scoreNote"></span>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="panel"><h3>排行榜</h3><div class="tablewrap" id="board"></div></div>
+    <div class="panel"><h3>作答紀錄（完成時間）</h3>
+      <div class="logctl">
+        <label>用時少於 <input type="number" id="thr" min="5" max="300" step="5"> 秒標記為「太快」</label>
+        <label><input type="checkbox" id="onlySus"> 只看疑似亂答</label>
+        <label>座號 <select id="logSeat"><option value="">全部</option></select></label>
+        <button class="btn ghost" style="padding:5px 12px;font-size:14px" id="copyLog">複製紀錄</button><span class="hint" id="logMsg"></span>
+      </div>
+      <div class="tablewrap" id="log"></div>
+      <p class="hint" style="margin:8px 0 0">用時＝從打開該篇到交卷的時間。疑似亂答的判斷：用時過短，或每題都選同一個選項且沒有全對。只是提醒，請老師再確認。</p>
+    </div>
+    <div class="panel"><h3>各篇全班平均答對率</h3><div class="bars" id="bars"></div></div>
+    <div class="panel"><h3>全班最容易錯的題目</h3><p class="hint" style="margin:0 0 6px">以每位同學「第一次作答」統計，較能反映真實理解。</p><ol class="hard" id="hard"></ol></div>
+    <details class="teacher" id="teacher">
+      <summary>教師區：匯入成績碼、匯出、清除</summary>
+      <div class="panel">
+        <h3>匯入學生成績碼</h3>
+        <p class="hint" style="margin:0 0 8px">學生若無法直接存入班級成績，作答完會拿到一段「成績碼」。請學生傳給你，貼在下面（可一次貼多段，每段一行）。</p>
+        <textarea id="codes" placeholder="MZ1.xxxx..."></textarea>
+        <div class="actions" style="margin-top:8px"><button class="btn" id="importBtn">匯入</button><span class="hint" id="importMsg"></span></div>
+      </div>
+      <div class="panel">
+        <h3>匯出與清除</h3>
+        <label class="field hide" id="pwWrap" style="max-width:260px">教師密碼（清除資料用，設定在 Apps Script 裡）<input type="text" id="tpw" autocomplete="off"></label>
+        <div class="actions"><button class="btn ghost" id="copyCsv">複製本班成績（可貼到 Excel）</button><button class="btn ghost" id="clearCls" style="border-color:var(--red);color:var(--red)">清除本班全部紀錄</button><span class="hint" id="toolMsg"></span></div>
+      </div>
+    </details>
+  </section>
+</div>
+
+<div class="mask hide" id="loginMask">
+  <form class="modal" id="loginForm">
+    <h3>請先登記</h3>
+    <p>成績會依「班級＋座號」累計，請正確填寫。</p>
+    <div class="row2">
+      <label class="field">班級<input type="text" id="inCls" placeholder="例：901" maxlength="10" required></label>
+      <label class="field">座號<input type="number" id="inSeat" min="1" max="60" placeholder="例：7" required></label>
+    </div>
+    <label class="field">姓名<input type="text" id="inName" maxlength="12" placeholder="王小明" required></label>
+    <div class="err" id="loginErr"></div>
+    <button class="btn" style="width:100%">開始</button>
+  </form>
+</div>
+
+<script src="config.js"></script>
+<script>
+/* ===================== 四格漫畫繪圖工具 ===================== */
+const INK="#3a302a", SKIN="#f6dcbc";
+const K = {
+  bg(kind){
+    const sky={field:"#eaf2e4",home:"#f3e8d4",court:"#f5e6d6",grave:"#e3e6df",market:"#f6ead7",school:"#eef0e6",battle:"#f4e2cc",street:"#efe7da",pond:"#e6f0ef",snow:"#e7ecf2",plain:"#f8f2e7"}[kind]||"#f8f2e7";
+    const gr={field:"#d8c69c",home:"#d9c3a0",court:"#c9a98a",grave:"#bfc4a8",market:"#d6c2a0",school:"#cdc6a6",battle:"#d7b48a",street:"#cfbf9f",pond:"#cbd8b4",snow:"#dfe5ea",plain:"#e2d6c0"}[kind]||"#e2d6c0";
+    let s=`<rect width="240" height="200" fill="${sky}"/><rect y="165" width="240" height="35" fill="${gr}"/>`;
+    if(kind==="home") s+=`<rect x="150" y="40" width="50" height="40" fill="#fffaf0" stroke="${INK}" stroke-width="1.5"/><path d="M175 40v40M150 60h50" stroke="${INK}" stroke-width="1.2"/>`;
+    if(kind==="court") s+=`<rect x="8" y="20" width="14" height="145" fill="#b5402a"/><rect x="218" y="20" width="14" height="145" fill="#b5402a"/><rect x="85" y="10" width="70" height="22" rx="2" fill="#2d2622"/><text x="120" y="26" text-anchor="middle" font-size="13" fill="#e9c46a" font-weight="700">宮殿</text>`;
+    if(kind==="grave") s+=K.grave(30,165)+K.grave(205,165)+`<path d="M0 165 Q120 150 240 165" fill="none" stroke="#a9ae92" stroke-width="2"/>`;
+    if(kind==="market") s+=K.stall(10,165,"布")+K.stall(170,165,"米");
+    if(kind==="school") s+=`<rect x="150" y="70" width="80" height="95" fill="#f7efdc" stroke="${INK}" stroke-width="1.5"/><path d="M140 72 L190 45 L240 72Z" fill="#7a4b33" stroke="${INK}" stroke-width="1.5"/><rect x="172" y="84" width="36" height="20" fill="#2d2622"/><text x="190" y="99" text-anchor="middle" font-size="12" fill="#f3e2b0">學宮</text>`;
+    if(kind==="battle") s+=`<path d="M0 165 Q60 150 120 160 T240 155" fill="none" stroke="#c49a6a" stroke-width="2"/><circle cx="200" cy="38" r="14" fill="#f1c27d" opacity=".6"/>`;
+    if(kind==="pond") s+=`<ellipse cx="120" cy="178" rx="90" ry="14" fill="#9cc3c6" stroke="${INK}" stroke-width="1.2"/>`;
+    if(kind==="street") s+=`<rect x="0" y="80" width="60" height="85" fill="#e3d2b4" stroke="${INK}" stroke-width="1.2"/><rect x="180" y="80" width="60" height="85" fill="#e3d2b4" stroke="${INK}" stroke-width="1.2"/>`;
+    return s;
+  },
+  /* 人物：x,y 為腳底中心 */
+  p(x,y,o={}){
+    const s=o.s||1, f=o.flip?-1:1, c=o.c||"#6b8fb5", a=o.arms||"down", fc=o.face||"neutral";
+    const L=(x1,y1,x2,y2)=>`<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${INK}" stroke-width="3" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="3.2" fill="${SKIN}" stroke="${INK}" stroke-width="1.2"/>`;
+    const arms={
+      down:L(-12,-48,-19,-22)+L(12,-48,19,-22),
+      up:L(-12,-48,-26,-80)+L(12,-48,26,-80),
+      point:L(-12,-48,-19,-22)+L(12,-48,36,-58),
+      pull:L(-11,-48,22,-74)+L(11,-48,28,-68),
+      bow:L(-12,-48,3,-36)+L(12,-48,3,-36),
+      run:L(-12,-48,-28,-32)+L(12,-48,28,-62),
+      hold:L(-12,-48,-19,-22)+L(12,-46,32,-40),
+      give:L(-12,-46,26,-42)+L(12,-46,32,-44),
+      cry:L(-12,-48,-7,-66)+L(12,-48,7,-66),
+      hips:L(-12,-48,-22,-30)+L(12,-48,22,-30),
+      write:L(-12,-48,-19,-22)+L(12,-48,24,-36)
+    }[a]||"";
+    const E=(d)=>`<g stroke="${INK}" stroke-width="1.8" fill="none" stroke-linecap="round">${d}</g>`;
+    const dots=`<circle cx="-5" cy="-72" r="1.9" fill="${INK}"/><circle cx="5" cy="-72" r="1.9" fill="${INK}"/>`;
+    const face={
+      neutral:dots+E(`<path d="M-4 -63 H4"/>`),
+      happy:dots+E(`<path d="M-5 -65 Q0 -59 5 -65"/>`)+`<circle cx="-9" cy="-66" r="2.4" fill="#f2a7a0" opacity=".7"/><circle cx="9" cy="-66" r="2.4" fill="#f2a7a0" opacity=".7"/>`,
+      sad:dots+E(`<path d="M-5 -61 Q0 -66 5 -61"/><path d="M-8 -78 L-3 -76"/><path d="M8 -78 L3 -76"/>`),
+      tired:E(`<path d="M-8 -72 H-2"/><path d="M2 -72 H8"/><path d="M-5 -62 q2.5 -3 5 0 q2.5 3 5 0"/>`)+`<path d="M14 -82 q3 5 0 7 q-3 -2 0 -7z" fill="#8ec5e8"/>`,
+      shock:E(`<circle cx="-5" cy="-73" r="3"/><circle cx="5" cy="-73" r="3"/><ellipse cx="0" cy="-62" rx="3" ry="4"/>`),
+      smug:E(`<path d="M-8 -72 Q-5 -70 -2 -72"/><path d="M2 -72 Q5 -70 8 -72"/><path d="M-4 -64 Q2 -60 6 -66"/>`),
+      cry:E(`<path d="M-8 -73 Q-5 -70 -2 -73"/><path d="M2 -73 Q5 -70 8 -73"/><path d="M-4 -61 Q0 -65 4 -61"/>`)+`<path d="M-6 -69 q-2 5 0 7 q2 -2 0 -7z M6 -69 q-2 5 0 7 q2 -2 0 -7z" fill="#8ec5e8"/>`,
+      focus:E(`<path d="M-8 -75 L-2 -73"/><path d="M8 -75 L2 -73"/>`)+dots+E(`<path d="M-3 -63 H3"/>`),
+      up:`<circle cx="-4" cy="-75" r="1.9" fill="${INK}"/><circle cx="6" cy="-75" r="1.9" fill="${INK}"/>`+E(`<path d="M-3 -63 Q1 -60 5 -64"/>`)
+    }[fc];
+    const hat={
+      crown:`<rect x="-17" y="-92" width="34" height="5" fill="#2d2622"/><rect x="-9" y="-89" width="18" height="6" fill="#e0b13f" stroke="${INK}" stroke-width="1"/><path d="M-15 -87v8M-10 -87v6M10 -87v6M15 -87v8" stroke="#c0392b" stroke-width="1.5"/>`,
+      scholar:`<path d="M-14 -78 Q-15 -90 0 -91 Q15 -90 14 -78 Q0 -84 -14 -78Z" fill="#2d2622"/><rect x="-5" y="-98" width="10" height="9" rx="2" fill="#2d2622"/>`,
+      bun:`<path d="M-15 -70 Q-17 -90 0 -89 Q17 -90 15 -70 Q12 -82 0 -82 Q-12 -82 -15 -70Z" fill="#2d2622"/><circle cx="0" cy="-92" r="7" fill="#2d2622"/><path d="M-6 -95 L8 -88" stroke="#d4a017" stroke-width="2"/>`,
+      hair:`<path d="M-15 -72 Q-16 -89 0 -89 Q16 -89 15 -72 Q10 -82 0 -82 Q-10 -82 -15 -72Z" fill="#2d2622"/><circle cx="0" cy="-90" r="5" fill="#2d2622"/>`,
+      child:`<path d="M-14 -74 Q-15 -88 0 -88 Q15 -88 14 -74 Q8 -82 0 -82 Q-8 -82 -14 -74Z" fill="#2d2622"/><circle cx="-11" cy="-87" r="5" fill="#2d2622"/><circle cx="11" cy="-87" r="5" fill="#2d2622"/>`,
+      helmet:`<path d="M-16 -74 Q-16 -92 0 -92 Q16 -92 16 -74Z" fill="#8a6a3e" stroke="${INK}" stroke-width="1.5"/><path d="M0 -92 v-6" stroke="#c0392b" stroke-width="3"/>`,
+      straw:`<path d="M-24 -78 L0 -96 L24 -78Z" fill="#e2c072" stroke="${INK}" stroke-width="1.5"/>`
+    }[o.hat||"hair"]||"";
+    const robe=`<path d="M-13 -52 L13 -52 L21 0 L-21 0Z" fill="${c}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/><path d="M-8 -52 L0 -40 L8 -52" fill="none" stroke="${INK}" stroke-width="1.5"/><rect x="-15" y="-34" width="30" height="5" fill="#00000022"/>`;
+    const extra = a==="run"?`<path d="M-30 -20 h-14 M-28 -10 h-18 M-30 -30 h-10" stroke="${INK}" stroke-width="1.5" opacity=".5"/>`:"";
+    return `<g transform="translate(${x} ${y}) scale(${s*f} ${s})">${extra}${robe}${arms}<circle cx="0" cy="-70" r="15" fill="${SKIN}" stroke="${INK}" stroke-width="2"/>${face}${hat}</g>`;
+  },
+  /* 對話框：x,y 為框中心；tx,ty 為尾巴指向 */
+  b(x,y,txt,tx,ty,o={}){
+    const lines=String(txt).split("\n"), fs=o.fs||12, w=Math.max(...lines.map(l=>[...l].length))*fs+16, h=lines.length*(fs+4)+12;
+    const x0=x-w/2,y0=y-h/2;
+    const bx=Math.max(x0+10,Math.min(x0+w-10,tx)), by=ty<y?y0:y0+h;
+    const tail=(tx!=null)?`<path d="M${bx-6} ${by} L${tx} ${ty} L${bx+6} ${by}" fill="#fff" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/><path d="M${bx-5} ${by} L${bx+5} ${by}" stroke="#fff" stroke-width="3"/>`:"";
+    const shape=o.shout?`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="3" fill="#fff" stroke="${INK}" stroke-width="2"/>`:`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="${h/2.4}" fill="#fff" stroke="${INK}" stroke-width="1.5"/>`;
+    const t=lines.map((l,i)=>`<text x="${x}" y="${y0+10+fs*0.85+i*(fs+4)}" text-anchor="middle" font-size="${fs}" fill="${INK}" font-weight="${o.bold?700:500}">${l}</text>`).join("");
+    return `<g>${shape}${tail}${t}</g>`;
+  },
+  label(x,y,txt,col="#b5402a"){const w=[...txt].length*11+10;return `<rect x="${x-w/2}" y="${y-9}" width="${w}" height="18" rx="3" fill="${col}"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">${txt}</text>`},
+  sprout(x,y,st="small"){
+    if(st==="wilt") return `<path d="M${x} ${y} q2 -14 -6 -20" stroke="#9a7b4f" stroke-width="2.5" fill="none"/><path d="M${x-6} ${y-20} q-8 2 -10 8 q7 0 10 -8z" fill="#b39462"/><path d="M${x+1} ${y-8} q8 0 9 7 q-7 -1 -9 -7z" fill="#b39462"/>`;
+    const h=st==="tall"?38:16;
+    return `<path d="M${x} ${y} V${y-h}" stroke="#4f8a4a" stroke-width="2.5"/><path d="M${x} ${y-h+4} q-10 -6 -12 -14 q10 2 12 14z" fill="#6fb35f"/><path d="M${x} ${y-h+8} q10 -6 12 -14 q-10 2 -12 14z" fill="#6fb35f"/>${st==="tall"?`<path d="M${x} ${y} q-5 3 -9 7 M${x} ${y} q5 3 9 7" stroke="#b39462" stroke-width="1.5" fill="none"/>`:""}`;
+  },
+  sun(x,y){let r="";for(let i=0;i<8;i++){const a=i*Math.PI/4;r+=`<path d="M${x+Math.cos(a)*20} ${y+Math.sin(a)*20} L${x+Math.cos(a)*28} ${y+Math.sin(a)*28}" stroke="#e6a23c" stroke-width="3" stroke-linecap="round"/>`}return r+`<circle cx="${x}" cy="${y}" r="15" fill="#f6c453" stroke="#e6a23c" stroke-width="2"/>`},
+  cloud(x,y,c="#cfd6df"){return `<path d="M${x-30} ${y+10} q-12 0 -10 -12 q2 -12 16 -10 q4 -14 20 -12 q14 2 16 14 q14 -2 16 10 q0 10 -12 10z" fill="${c}" stroke="${INK}" stroke-width="1.5"/>`},
+  snow(x,y){let s="";[[0,0],[18,10],[-16,14],[6,24],[-6,36],[22,32]].forEach(([dx,dy])=>{s+=`<text x="${x+dx}" y="${y+dy}" font-size="12" fill="#7aa3c8">❄</text>`});return s},
+  bird(x,y,s=1){return `<path d="M${x-14*s} ${y-4*s} Q${x-6*s} ${y-12*s} ${x} ${y} Q${x+6*s} ${y-12*s} ${x+14*s} ${y-4*s}" stroke="${INK}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`},
+  board(x,y){let g=`<rect x="${x-20}" y="${y-14}" width="40" height="14" fill="#c8995d" stroke="${INK}" stroke-width="1.5"/><path d="M${x-26} ${y-14} L${x+26} ${y-14} L${x+20} ${y-24} L${x-20} ${y-24}Z" fill="#e2b874" stroke="${INK}" stroke-width="1.5"/>`;[[-10,-19,"#222"],[4,-20,"#fff"],[12,-18,"#222"],[-3,-17,"#fff"]].forEach(([a,b,c])=>g+=`<circle cx="${x+a}" cy="${y+b}" r="2.3" fill="${c}" stroke="${INK}" stroke-width=".6"/>`);return g},
+  chicken(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="-12" rx="13" ry="10" fill="#fff" stroke="${INK}" stroke-width="1.8"/><circle cx="10" cy="-24" r="6" fill="#fff" stroke="${INK}" stroke-width="1.8"/><path d="M8 -30 l2 -5 l2 4 l2 -4 l1 5" fill="#d9483b"/><path d="M16 -24 l5 2 l-5 2z" fill="#e6a23c"/><circle cx="11" cy="-25" r="1" fill="${INK}"/><path d="M-3 -2 v4 M3 -2 v4" stroke="#e6a23c" stroke-width="2"/><path d="M-13 -14 q-7 -6 -4 -12" stroke="${INK}" stroke-width="1.5" fill="#fff"/></g>`},
+  fish(x,y,s=1,col="#e98a5b"){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 0 Q0 -10 12 0 Q0 10 -14 0Z" fill="${col}" stroke="${INK}" stroke-width="1.5"/><path d="M12 0 L20 -7 L20 7Z" fill="${col}" stroke="${INK}" stroke-width="1.5"/><circle cx="-7" cy="-2" r="1.5" fill="${INK}"/></g>`},
+  tree(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-7" y="-70" width="14" height="70" fill="#8b5e3c" stroke="${INK}" stroke-width="1.5"/><circle cx="0" cy="-88" r="30" fill="#7fb069" stroke="${INK}" stroke-width="1.5"/><circle cx="-22" cy="-72" r="16" fill="#7fb069" stroke="${INK}" stroke-width="1.5"/><circle cx="22" cy="-74" r="17" fill="#7fb069" stroke="${INK}" stroke-width="1.5"/></g>`},
+  flag(x,y,t,c="#b5402a"){return `<path d="M${x} ${y} V${y-70}" stroke="${INK}" stroke-width="2.5"/><path d="M${x} ${y-70} h28 l-6 10 l6 10 h-28z" fill="${c}" stroke="${INK}" stroke-width="1.2"/><text x="${x+12}" y="${y-55}" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">${t}</text>`},
+  grave(x,y){return `<path d="M${x-22} ${y} Q${x} ${y-36} ${x+22} ${y}Z" fill="#a8a58c" stroke="${INK}" stroke-width="1.5"/><rect x="${x-4}" y="${y-30}" width="8" height="14" fill="#8a8570"/>`},
+  stall(x,y,t){return `<rect x="${x}" y="${y-40}" width="60" height="40" fill="#e9d3a8" stroke="${INK}" stroke-width="1.2"/><path d="M${x-4} ${y-40} h68 l-6 -14 h-56z" fill="#c0563b" stroke="${INK}" stroke-width="1.2"/><text x="${x+30}" y="${y-16}" text-anchor="middle" font-size="12" fill="${INK}">${t}</text>`},
+  pot(x,y){return `<path d="M${x-20} ${y-26} h40 q2 26 -20 26 q-22 0 -20 -26z" fill="#555" stroke="${INK}" stroke-width="1.5"/><path d="M${x-8} ${y-32} q-4 -8 2 -14 M${x+4} ${y-32} q-4 -8 2 -14" stroke="#aaa" stroke-width="2" fill="none"/><path d="M${x-14} ${y} l-6 8 M${x+14} ${y} l6 8" stroke="${INK}" stroke-width="2"/><path d="M${x-10} ${y+8} q4 -10 10 0 q4 -10 10 0" fill="#f08a3c"/>`},
+  bowl(x,y){return `<path d="M${x-10} ${y} h20 q0 10 -10 10 q-10 0 -10 -10z" fill="#c9b79c" stroke="${INK}" stroke-width="1.5"/>`},
+  sign(x,y,t){return `<path d="M${x} ${y} V${y-34}" stroke="${INK}" stroke-width="2"/><rect x="${x-20}" y="${y-48}" width="40" height="16" fill="#fff8e6" stroke="${INK}" stroke-width="1.2"/><text x="${x}" y="${y-36}" text-anchor="middle" font-size="11" fill="${INK}" font-weight="700">${t}</text>`},
+  helmetGround(x,y){return `<path d="M${x-10} ${y} Q${x-10} ${y-14} ${x} ${y-14} Q${x+10} ${y-14} ${x+10} ${y}Z" fill="#8a6a3e" stroke="${INK}" stroke-width="1.2"/>`},
+  spear(x,y,ang=-20){return `<g transform="translate(${x} ${y}) rotate(${ang})"><path d="M0 0 H42" stroke="#7a5230" stroke-width="2.5"/><path d="M42 -4 L52 0 L42 4Z" fill="#999" stroke="${INK}"/></g>`},
+  fence(x,y,w){let s=`<path d="M${x} ${y-14} H${x+w} M${x} ${y-26} H${x+w}" stroke="#8b5e3c" stroke-width="2"/>`;for(let i=0;i<=w;i+=12)s+=`<path d="M${x+i} ${y} V${y-32}" stroke="#8b5e3c" stroke-width="3"/>`;return s},
+  vessel(x,y){return `<path d="M${x-8} ${y-14} h16 l-3 8 h-10z" fill="#b08d57" stroke="${INK}" stroke-width="1.2"/><path d="M${x} ${y-6} V${y}" stroke="${INK}" stroke-width="2"/><path d="M${x-6} ${y} h12" stroke="${INK}" stroke-width="2"/>`},
+  scroll(x,y){return `<rect x="${x-14}" y="${y-10}" width="28" height="20" fill="#f6e7c1" stroke="${INK}" stroke-width="1.2"/><path d="M${x-10} ${y-4} h20 M${x-10} ${y+1} h20 M${x-10} ${y+6} h14" stroke="${INK}" stroke-width=".8"/><rect x="${x-17}" y="${y-12}" width="4" height="24" fill="#8b5e3c"/><rect x="${x+13}" y="${y-12}" width="4" height="24" fill="#8b5e3c"/>`},
+  fire(x,y){return `<path d="M${x} ${y} q-16 -10 -6 -30 q2 10 8 10 q-2 -14 8 -24 q2 16 10 22 q6 14 -6 22z" fill="#f08a3c" stroke="#b5402a" stroke-width="1.5"/>`},
+  mark(x,y,t,s=18,c="#b5402a"){return `<text x="${x}" y="${y}" text-anchor="middle" font-size="${s}" fill="${c}" font-weight="900">${t}</text>`},
+  sweat(x,y){return `<path d="M${x} ${y} q4 6 0 9 q-4 -3 0 -9z" fill="#8ec5e8"/>`}
+};
+const MZ={c:"#8a7a5c",hat:"scholar"};             // 孟子造型
+const KING={c:"#8e3b2f",hat:"crown"};             // 國君造型
+const WOMAN={c:"#c0788a",hat:"bun"};
+
+const COMICS = {
+ s1:[
+  {cap:"宋國有個人，擔心田裡的禾苗長不高。",d:()=>K.bg("field")+K.sprout(40,168)+K.sprout(70,168)+K.sprout(100,168)+K.p(170,175,{hat:"straw",c:"#7d9a6b",face:"sad",arms:"hips"})+K.b(130,40,"怎麼都不長呢？",160,82)},
+  {cap:"他把禾苗一棵棵往上拔。",d:()=>K.bg("field")+K.sprout(40,168,"tall")+K.sprout(70,168,"tall")+K.p(130,175,{hat:"straw",c:"#7d9a6b",face:"focus",arms:"pull",flip:true})+K.sprout(102,140,"tall")+K.b(180,42,"長高吧！",145,80,{shout:true,bold:true})+K.sweat(150,80)},
+  {cap:"累得半死回到家，還得意地向家人報告。",d:()=>K.bg("home")+K.p(80,175,{hat:"straw",c:"#7d9a6b",face:"tired",arms:"down"})+K.p(175,178,{hat:"child",c:"#e0a458",face:"shock",s:.8,flip:true})+K.b(90,38,"累壞了！\n我幫苗長高了！",85,82)},
+  {cap:"兒子趕去一看，禾苗全都枯死了。",d:()=>K.bg("field")+K.sprout(40,168,"wilt")+K.sprout(75,168,"wilt")+K.sprout(110,168,"wilt")+K.p(185,178,{hat:"child",c:"#e0a458",face:"shock",arms:"up",s:.8})+K.b(170,45,"苗都枯了！",185,92,{shout:true,bold:true})}
+ ],
+ s2:[
+  {cap:"再容易生長的植物，曬一天……",d:()=>K.bg("field")+K.sun(60,50)+K.sprout(140,168)+K.label(180,40,"第 1 天","#e6a23c")},
+  {cap:"……卻凍十天，也不可能長得好。",d:()=>K.bg("snow")+K.cloud(80,40)+K.cloud(170,30)+K.snow(70,75)+K.snow(160,70)+K.sprout(130,168,"wilt")+K.label(60,140,"第 2～11 天","#6a8fb0")},
+  {cap:"弈秋教兩人下棋，其中一人心想天鵝要飛來了。",d:()=>K.bg("plain")+K.board(70,170)+K.p(30,178,{c:"#6b8fb5",face:"focus",s:.85})+K.p(115,178,{c:"#c48b4b",face:"up",arms:"up",s:.85,flip:true})+K.bird(170,40)+K.bird(200,58,.7)+K.b(185,92,"有天鵝！射牠！",130,110)},
+  {cap:"兩人一起學，成績卻差很多。不是比較笨，是不專心。",d:()=>K.bg("plain")+K.p(70,178,{c:"#6b8fb5",face:"happy",arms:"up"})+K.mark(70,60,"勝",26,"#3f6e52")+K.p(170,178,{c:"#c48b4b",face:"sad"})+K.mark(170,60,"敗",26,"#b5402a")}
+ ],
+ s3:[
+  {cap:"梁惠王問孟子：我這麼用心，百姓怎麼沒變多？",d:()=>K.bg("court")+K.p(70,178,KING)+K.p(170,178,{...MZ,flip:true,arms:"bow"})+K.b(95,52,"我很用心啊，\n怎麼人沒變多？",75,90)},
+  {cap:"孟子說：戰鼓一響，士兵丟盔棄甲逃跑……",d:()=>K.bg("battle")+K.flag(28,165,"魏")+K.helmetGround(60,168)+K.spear(70,160,10)+K.p(130,178,{hat:"helmet",c:"#7a6a5a",face:"shock",arms:"run",flip:true,s:.85})+K.p(200,178,{hat:"helmet",c:"#7a6a5a",face:"shock",arms:"run",flip:true,s:.85})},
+  {cap:"跑了五十步的，嘲笑跑了一百步的。",d:()=>K.bg("battle")+K.sign(60,168,"50步")+K.sign(190,168,"100步")+K.p(95,178,{hat:"helmet",c:"#7a6a5a",face:"smug",arms:"point",s:.8})+K.p(215,178,{hat:"helmet",c:"#7a6a5a",face:"sad",s:.8})+K.b(100,45,"哈哈，膽小鬼！",120,95)},
+  {cap:"惠王：那也一樣是逃跑啊！孟子：您和鄰國也是如此。",d:()=>K.bg("court")+K.p(70,178,{...KING,face:"shock"})+K.p(170,178,{...MZ,flip:true,arms:"point"})+K.b(62,40,"一樣是逃跑！",68,86,{bold:true})+K.b(180,40,"王如知此…",172,86)}
+ ],
+ s4:[
+  {cap:"有個人每天偷鄰居家的一隻雞。",d:()=>K.bg("field")+K.fence(150,168,80)+K.chicken(190,165)+K.p(90,178,{c:"#5a5a6e",face:"smug",arms:"hold"})+K.chicken(125,140,.8)+K.label(50,40,"每天一隻")},
+  {cap:"有人勸他：這不是君子該做的事。",d:()=>K.bg("field")+K.p(70,178,{c:"#5a5a6e",face:"shock"})+K.chicken(105,140,.7)+K.p(175,178,{c:"#6b8fb5",arms:"point",flip:true})+K.b(165,45,"這不是\n君子之道！",175,90)},
+  {cap:"他說：那我少偷一點，每月一隻，明年再停。",d:()=>K.bg("field")+K.p(100,178,{c:"#5a5a6e",face:"smug",arms:"hips"})+K.b(120,45,"那改成每月一隻，\n明年再停～",105,90)+K.label(200,140,"月攘一雞")},
+  {cap:"孟子：既然知道不對，就該馬上停止！",d:()=>K.bg("plain")+K.p(120,178,{...MZ,arms:"point"})+K.b(120,42,"知其非義，\n斯速已矣！",120,88,{bold:true,shout:true})}
+ ],
+ s5:[
+  {cap:"齊人每天吃飽喝足回家，說是跟富貴人家吃飯。",d:()=>K.bg("home")+K.p(70,178,{c:"#b08d57",face:"smug",arms:"hips"})+K.p(150,178,{...WOMAN,flip:true,s:.9})+K.p(200,178,{c:"#8fb3a0",hat:"bun",flip:true,s:.85})+K.b(80,45,"又跟大官吃飯啦！",70,90)},
+  {cap:"妻子起疑，一早偷偷跟在丈夫後面。",d:()=>K.bg("street")+K.p(150,178,{c:"#b08d57",s:.8,flip:true})+K.tree(70,175,.8)+K.p(40,178,{...WOMAN,face:"focus",s:.8,flip:true})+K.mark(110,70,"？",22)},
+  {cap:"結果丈夫走到墳地，向祭墓的人討剩菜吃。",d:()=>K.bg("grave")+K.p(150,178,{c:"#8a8a8a",flip:true,s:.85})+K.bowl(118,140)+K.p(80,178,{c:"#b08d57",face:"happy",arms:"hold",s:.85})+K.b(80,40,"剩菜給我吧～",80,90)},
+  {cap:"妻妾相對哭泣，丈夫卻得意洋洋地回來。",d:()=>K.bg("home")+K.p(45,178,{...WOMAN,face:"cry",arms:"cry",s:.85})+K.p(95,178,{c:"#8fb3a0",hat:"bun",face:"cry",arms:"cry",s:.85})+K.p(185,178,{c:"#b08d57",face:"smug",arms:"hips",flip:true})+K.b(180,45,"我回來啦！",185,92)}
+ ],
+ s6:[
+  {cap:"齊宣王最大的願望，是開疆拓土、稱霸天下。",d:()=>K.bg("court")+K.p(80,178,{...KING,face:"smug",arms:"up"})+K.p(175,178,{...MZ,flip:true})+K.b(95,45,"我要稱霸天下！",85,82)},
+  {cap:"孟子：用武力求霸業，就像爬到樹上抓魚。",d:()=>K.bg("pond")+K.tree(120,170,1.1)+K.p(120,100,{c:"#7d9a6b",face:"focus",arms:"up",s:.6})+K.mark(160,60,"？",20)+K.fish(190,175,.8,"#e98a5b")},
+  {cap:"爬樹抓魚，頂多是抓不到魚而已……",d:()=>K.bg("pond")+K.tree(60,170,.9)+K.p(140,178,{c:"#7d9a6b",face:"sad"})+K.fish(200,178,.7)+K.b(150,45,"一條都沒有…",140,88)},
+  {cap:"……但發動戰爭求霸業，最後必有災禍。",d:()=>K.bg("battle")+K.fire(50,168)+K.fire(200,168)+K.flag(120,160,"齊","#555")+K.p(150,178,{...KING,face:"shock",s:.85})}
+ ],
+ s7:[
+  {cap:"楚國大夫請一位齊國人教兒子說齊語。",d:()=>K.bg("home")+K.p(70,178,{c:"#4f7a9a",hat:"scholar"})+K.p(160,178,{hat:"child",c:"#e0a458",s:.8,flip:true,face:"focus"})+K.b(85,45,"齊語這樣說…",75,88)},
+  {cap:"可是旁邊一大群楚國人一直吵他。",d:()=>K.bg("home")+K.p(120,178,{hat:"child",c:"#e0a458",s:.8,face:"shock"})+K.p(40,178,{c:"#9a6a4f",s:.8})+K.p(200,178,{c:"#9a6a4f",s:.8,flip:true})+K.b(45,45,"說楚語！",40,98,{shout:true})+K.b(195,45,"楚！楚！",200,98,{shout:true})+K.b(120,60,"吵～",120,98,{shout:true})},
+  {cap:"如果帶他到齊國熱鬧的街坊住幾年，自然就會了。",d:()=>K.bg("street")+`<rect x="190" y="92" width="40" height="18" fill="#b5402a"/><text x="210" y="105" text-anchor="middle" font-size="11" fill="#fff">莊嶽</text>`+K.p(120,178,{hat:"child",c:"#e0a458",s:.85,face:"happy",arms:"up"})+K.b(120,48,"我會說齊語了！",120,95)},
+  {cap:"君王身邊只有一位好人薛居州，又能改變什麼？",d:()=>K.bg("court")+K.p(120,178,{...KING,s:.9})+K.p(50,178,{c:"#3f6e52",face:"happy",s:.75})+K.label(50,190,"薛居州","#3f6e52")+K.p(180,178,{c:"#555",face:"smug",s:.7,flip:true})+K.p(205,178,{c:"#555",face:"smug",s:.7,flip:true})+K.p(155,178,{c:"#555",face:"smug",s:.7,flip:true})}
+ ],
+ s8:[
+  {cap:"有人送活魚給子產，子產叫校人養在池裡。",d:()=>K.bg("court")+K.p(80,178,{c:"#4f6e8a",hat:"scholar",arms:"give"})+K.fish(118,134,.8)+K.p(170,178,{c:"#9a8a6a",flip:true,arms:"hold"})+K.b(90,45,"養到池子裡吧。",80,88)},
+  {cap:"校人卻把魚煮來吃掉了。",d:()=>K.bg("home")+K.pot(120,160)+K.fish(120,128,.6)+K.p(190,178,{c:"#9a8a6a",face:"smug",flip:true,arms:"hold"})+K.b(170,40,"嘿嘿，好香～",185,88)},
+  {cap:"他回報：魚放進池裡，一下子就游走了。",d:()=>K.bg("court")+K.p(170,178,{c:"#9a8a6a",flip:true,arms:"bow"})+K.p(65,178,{c:"#4f6e8a",hat:"scholar",face:"happy"})+K.b(172,40,"魚悠悠游走了！",170,88)+K.b(58,40,"得其所哉！",64,86)},
+  {cap:"校人出門偷笑。君子可以被合理的說法欺騙。",d:()=>K.bg("street")+K.p(120,178,{c:"#9a8a6a",face:"smug",arms:"hips"})+K.b(120,45,"誰說子產聰明？",120,90)}
+ ],
+ s9:[
+  {cap:"孟子：朋友讓你託付的妻兒挨餓，怎麼辦？王：絕交！",d:()=>K.bg("court")+K.p(170,178,{...MZ,flip:true})+K.p(70,178,KING)+K.b(178,40,"朋友失職呢？",172,86)+K.b(55,40,"絕交！",66,86,{bold:true})},
+  {cap:"孟子：官員管不好部下呢？王：撤職！",d:()=>K.bg("court")+K.p(170,178,{...MZ,flip:true,arms:"point"})+K.p(70,178,{...KING,face:"smug"})+K.b(178,40,"官員失職呢？",172,86)+K.b(55,40,"撤職！",66,86,{bold:true})},
+  {cap:"孟子：那國家治理不好呢？",d:()=>K.bg("court")+K.p(170,178,{...MZ,flip:true,arms:"point"})+K.p(70,178,{...KING,face:"shock"})+K.b(170,40,"國家治不好呢？",170,90,{bold:true})+K.mark(70,60,"！",28)},
+  {cap:"齊宣王左右張望，把話題扯開了。",d:()=>K.bg("court")+K.p(170,178,{...MZ,flip:true,face:"smug"})+K.p(70,178,{...KING,face:"up",arms:"point",flip:true})+K.b(80,40,"今天天氣真好～",60,88)+K.sweat(88,90)}
+ ],
+ s10:[
+  {cap:"住在墓地旁，小孟子就玩起築墳下葬的遊戲。",d:()=>K.bg("grave")+K.p(100,178,{hat:"child",c:"#e0a458",s:.75,face:"happy",arms:"up"})+K.grave(140,170)+K.p(195,178,{...WOMAN,face:"sad",flip:true})+K.b(190,40,"不能住這裡…",195,88)},
+  {cap:"搬到市場旁，他又學商人沿街叫賣。",d:()=>K.bg("market")+K.p(110,178,{hat:"child",c:"#e0a458",s:.75,face:"happy",arms:"point"})+K.b(100,65,"賣喔～便宜賣！",105,110,{shout:true})+K.p(200,178,{...WOMAN,face:"sad",flip:true,s:.9})},
+  {cap:"搬到學宮旁，孟子學會擺禮器、作揖行禮。",d:()=>K.bg("school")+K.vessel(55,168)+K.vessel(80,168)+K.p(115,178,{hat:"child",c:"#e0a458",s:.75,arms:"bow",face:"focus"})+K.p(30,178,{...WOMAN,face:"happy",s:.85})+K.b(60,45,"就住這裡！",40,90)},
+  {cap:"孟子長大後學習六藝，成為一代大儒。",d:()=>K.bg("school")+K.p(90,178,{...MZ,face:"happy",arms:"hold"})+K.scroll(126,138)+K.label(90,40,"一代大儒","#b8892f")}
+ ]
+};
+function comicSVG(panel){return `<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC, PingFang TC, sans-serif" role="img" aria-label="${panel.cap}">${panel.d()}</svg>`}
+
+</script>
+<script>
+/* ===================== 題庫 ===================== */
+const STORIES = [
+{ id:"s1", title:"揠苗助長", idiom:"揠苗助長", src:"《孟子・公孫丑上》",
+  text:["宋人有閔其苗之不長而揠之者，芒芒然歸，謂其人曰：「今日病矣！予助苗長矣！」其子趨而往視之，苗則槁矣。","天下之不助苗長者寡矣。以為無益而舍之者，不耘苗者也；助之長者，揠苗者也。非徒無益，而又害之。"],
+  notes:[["閔","擔憂"],["揠","拔起"],["病","疲累"],["其人","他的家人"],["槁","枯乾"],["耘","除草"],["非徒","不僅"]],
+  trans:"宋國有個人擔心禾苗長不高，就把禾苗一棵棵往上拔，累得疲憊地回家，對家人說：「今天累壞了！我幫助禾苗長高了！」兒子跑去看，禾苗都枯死了。孟子說：天下不想幫禾苗快長的人很少。認為沒用而放棄的，是不除草的人；硬要幫它長的，是拔苗的人——這樣不但沒有好處，反而害了它。",
+  qs:[
+   {q:"「芒芒然歸」的「芒芒然」，意思最接近下列何者？",o:["得意洋洋的樣子","疲倦的樣子","茫然不知所措的樣子","匆忙急促的樣子"],a:1,e:"「芒芒然」形容疲累的樣子。宋人拔了一整天的苗，回家還說「今日病矣」（今天累壞了），可互相印證。"},
+   {q:"「天下之不助苗長者寡矣」，這句話的意思最接近下列何者？",o:["天下懂得種田的人很少","天下像宋人一樣急於求成的人其實很多","天下願意幫助別人的人很少","天下的禾苗大多長不好"],a:1,e:"「不助苗長者寡」＝不想幫苗快長的人很少，換句話說，犯了急於求成毛病的人很多。注意雙重否定的語意。"},
+   {q:"「非徒無益，而又害之」，下列何者最符合這句話所批評的情形？",o:["弟弟為了快點長高，每天吞大量鈣片，反而傷了腸胃","他從不澆花，花自然就枯萎了","小華每天固定練琴三十分鐘，琴藝穩定進步","農夫按時除草施肥，收成豐碩"],a:0,e:"強求速成、違反自然規律而受害，正是「揠苗者」。從不澆花是「舍之」的「不耘苗者」，只是無益，並未「又害之」。"}
+  ]},
+{ id:"s2", title:"一暴十寒", idiom:"一暴十寒・專心致志", src:"《孟子・告子上》",
+  text:["孟子曰：「無或乎王之不智也。雖有天下易生之物也，一日暴之，十日寒之，未有能生者也。吾見亦罕矣，吾退而寒之者至矣，吾如有萌焉何哉？","今夫弈之為數，小數也；不專心致志，則不得也。弈秋，通國之善弈者也。使弈秋誨二人弈，其一人專心致志，惟弈秋之為聽；一人雖聽之，一心以為有鴻鵠將至，思援弓繳而射之。雖與之俱學，弗若之矣。為是其智弗若與？曰：非然也。」"],
+  notes:[["無或","不要奇怪"],["暴","音ㄆㄨˋ，同「曝」，曬"],["見","音ㄒㄧㄢˋ，指與齊王見面"],["弈","下棋"],["數","技藝"],["鴻鵠","天鵝"],["援","拉"],["繳","音ㄓㄨㄛˊ，繫在箭上的絲繩"]],
+  trans:"孟子說：不要奇怪齊王不明智。即使是天下最容易生長的植物，曬一天、凍十天，也不可能長得好。我和齊王見面的機會很少，我一離開，讓他心冷的人就來了，他就算有一點善念萌芽，我又能怎麼樣呢？下棋只是小技藝，但不專心也學不會。弈秋是全國最會下棋的人，他教兩個人下棋：一個專心聽講；另一個雖然在聽，心裡卻想著天鵝要飛來了，想拉弓射牠。兩人一起學，後者卻比不上前者。是他比較笨嗎？不是的。",
+  qs:[
+   {q:"「一日暴之，十日寒之」的「暴」，與下列哪一個「暴」字意思相同？",o:["暴跳如雷","自暴自棄","暴風驟雨","秋陽以暴之"],a:3,e:"本文「暴」讀ㄆㄨˋ，通「曝」，曬太陽；「秋陽以暴之」是用秋天的太陽曝曬。暴跳如雷：急躁；自暴自棄：糟蹋；暴風驟雨：猛烈。"},
+   {q:"弈秋教兩人下棋，其中一人學不好。依文意，主要原因是什麼？",o:["天資比另一人差","弈秋教學偏心","心裡想著射天鵝，不能專心致志","下棋只是小技藝，不值得學"],a:2,e:"文末自問「為是其智弗若與？」自答「非然也」，可見不是聰明不如人，而是不專心。"},
+   {q:"「吾退而寒之者至矣」一句，孟子真正想表達的是什麼？",o:["我一離開齊王，讓他心志冷卻的人就來了","我退隱之後，天氣就變冷了","我退讓之後，齊王就開始冷落我","我回去以後，生病發冷的人就上門了"],a:0,e:"孟子以「暴」比喻自己對齊王的正面影響，以「寒」比喻小人的負面影響。接觸少、干擾多，齊王即使有善念萌芽也長不起來。"}
+  ]},
+{ id:"s3", title:"五十步笑百步", idiom:"五十步笑百步", src:"《孟子・梁惠王上》",
+  text:["梁惠王曰：「寡人之於國也，盡心焉耳矣。河內凶，則移其民於河東，移其粟於河內；河東凶亦然。察鄰國之政，無如寡人之用心者。鄰國之民不加少，寡人之民不加多，何也？」","孟子對曰：「王好戰，請以戰喻。填然鼓之，兵刃既接，棄甲曳兵而走。或百步而後止，或五十步而後止。以五十步笑百步，則何如？」曰：「不可，直不百步耳，是亦走也。」曰：「王如知此，則無望民之多於鄰國也。」"],
+  notes:[["凶","荒年，收成不好"],["粟","糧食"],["加","更"],["填然","擊鼓的聲音"],["曳","拖著"],["兵","兵器"],["走","逃跑"],["直","只是"]],
+  trans:"梁惠王說：我治理國家很用心，河內鬧饑荒就把百姓遷到河東、把糧食運到河內，河東鬧饑荒也這樣做。鄰國國君沒有像我這麼用心的，為什麼鄰國百姓沒減少，我的百姓也沒增加？孟子說：大王喜歡打仗，就用打仗來比喻。戰鼓一響、兵刃相接，士兵丟盔棄甲、拖著兵器逃跑，有人跑了一百步停下，有人跑了五十步停下。跑五十步的嘲笑跑一百步的，可以嗎？惠王說：不行，只是沒跑到一百步罷了，同樣是逃跑。孟子說：大王既然明白這道理，就別指望百姓比鄰國多了。",
+  qs:[
+   {q:"「棄甲曳兵而走」的「走」，意思是什麼？",o:["散步","前進","逃跑","離開故鄉"],a:2,e:"文言文的「走」多指「跑」，此處指戰敗逃跑；「曳兵」是拖著兵器。"},
+   {q:"下列何者最適合用「五十步笑百步」來形容？",o:["哥哥跑步比弟弟快，常取笑弟弟跑太慢","作業遲交一天的小明，嘲笑遲交三天的同學不守時","考試進步十名的同學獲得老師表揚","比賽勝隊主動安慰落敗的對手"],a:1,e:"兩人犯的是同一種錯（遲交），只是程度不同，卻以輕笑重。哥哥與弟弟的速度是真實差距，並非同樣的缺失。"},
+   {q:"孟子用這個比喻，想告訴梁惠王什麼？",o:["魏國軍隊紀律不佳，應加強訓練","梁惠王移民移粟只是小惠，和鄰國一樣未行仁政，不必期望百姓增多","鄰國國君其實比梁惠王更用心","戰場上只逃五十步的人比較勇敢"],a:1,e:"惠王的「用心」只是荒年救急，並未根本推行仁政，與鄰國只是程度差別，本質相同。"}
+  ]},
+{ id:"s4", title:"月攘一雞", idiom:"月攘一雞", src:"《孟子・滕文公下》",
+  text:["戴盈之曰：「什一，去關市之征，今茲未能。請輕之，以待來年，然後已，何如？」","孟子曰：「今有人日攘其鄰之雞者，或告之曰：『是非君子之道。』曰：『請損之，月攘一雞，以待來年，然後已。』如知其非義，斯速已矣，何待來年？」"],
+  notes:[["戴盈之","宋國大夫"],["什一","十分抽一的稅率"],["關市之征","關卡與市場的稅"],["今茲","今年"],["已","停止"],["攘","偷取"],["損","減少"],["斯","就"]],
+  trans:"戴盈之說：實行十分抽一的稅、免除關卡和市場的稅，今年還做不到，先減輕一些，等明年再完全廢除，怎麼樣？孟子說：有個人每天偷鄰居的雞，有人告訴他這不是君子該做的事。他說：那我減少一點，每個月偷一隻，等到明年再停止。如果知道這件事不合道義，就該趕快停止，何必等到明年？",
+  qs:[
+   {q:"「日攘其鄰之雞」的「攘」，意思是什麼？",o:["推讓","偷取","排除","擾亂"],a:1,e:"「攘」在此為竊取、偷取之意。「月攘一雞」即每個月偷一隻雞。"},
+   {q:"孟子以偷雞者作比喻，主要是批評戴盈之什麼樣的態度？",o:["稅收太重，讓百姓難以負擔","明知不對，卻拖延不肯立刻改正","偷雞的人應該受到重罰","鄰居之間應該互相幫忙"],a:1,e:"關鍵句是「如知其非義，斯速已矣，何待來年？」重點在批評知錯卻拖延不改。"},
+   {q:"下列哪一句話的道理，與本文最相近？",o:["欲速則不達","三思而後行","過而不改，是謂過矣","水滴石穿"],a:2,e:"本文強調知錯就該立刻改，拖延不改正是一種過錯，與《論語》「過而不改，是謂過矣」相通。"}
+  ]},
+{ id:"s5", title:"齊人驕其妻妾", idiom:"乞墦（墦間乞餘）", src:"《孟子・離婁下》",
+  text:["齊人有一妻一妾而處室者，其良人出，則必饜酒肉而後反。其妻問所與飲食者，則盡富貴也。其妻告其妾曰：「良人出，則必饜酒肉而後反；問其與飲食者，盡富貴也，而未嘗有顯者來，吾將瞷良人之所之也。」","蚤起，施從良人之所之，遍國中無與立談者。卒之東郭墦間，之祭者，乞其餘；不足，又顧而之他——此其為饜足之道也。","其妻歸，告其妾曰：「良人者，所仰望而終身也，今若此！」與其妾訕其良人，而相泣於中庭。而良人未之知也，施施從外來，驕其妻妾。由君子觀之，則人之所以求富貴利達者，其妻妾不羞也而不相泣者，幾希矣！"],
+  notes:[["良人","丈夫"],["饜","吃飽"],["反","同「返」"],["顯者","有地位的人"],["瞷","音ㄐㄧㄢˋ，偷看"],["蚤","同「早」"],["施","音ㄧˊ，斜行，暗中尾隨"],["墦","音ㄈㄢˊ，墳墓"],["訕","譏罵"],["施施","得意洋洋的樣子"],["幾希","很少"]],
+  trans:"齊國有個人和一妻一妾同住。丈夫每次出門都吃飽喝足才回家，說是和富貴人家吃飯。妻子起疑：從沒見過有地位的人來家裡。於是一早暗中跟蹤，發現全城沒人跟他說話，他最後走到東城外的墳地，向祭墓的人討剩下的酒菜，不夠，又四處張望去別家討——這就是他吃飽的方法。妻子回家和妾一起數落丈夫、相對哭泣，丈夫卻不知情，還得意洋洋地從外面回來，在妻妾面前擺架子。在君子看來，人們追求富貴利祿的手段，能不讓妻妾感到羞恥而哭泣的，實在很少。",
+  qs:[
+   {q:"文中「良人」指的是誰？",o:["善良的人","丈夫","國家的良民","家中僕人"],a:1,e:"古代妻子稱丈夫為「良人」。妻子說「良人者，所仰望而終身也」，指終身依靠的丈夫。"},
+   {q:"妻子「蚤起，施從良人之所之」，她這麼做的原因是什麼？",o:["想陪丈夫去拜訪富貴的朋友","懷疑丈夫說謊，因為從未有顯貴的人來家中","要到東郭去祭祀祖先","想到市場買酒買肉"],a:1,e:"「而未嘗有顯者來」是妻子起疑的關鍵：丈夫說天天與富貴者往來，卻從沒有一位到家裡來過。"},
+   {q:"「施施從外來，驕其妻妾」，最能表現齊人什麼樣的性格？",o:["謙虛有禮","愛慕虛榮、自欺欺人","勤儉持家","知錯能改"],a:1,e:"他靠乞討吃飽，回家卻得意洋洋擺架子，可見愛面子、虛偽。孟子藉此諷刺不擇手段追求富貴、在人前裝模作樣的人。"}
+  ]},
+{ id:"s6", title:"緣木求魚", idiom:"緣木求魚", src:"《孟子・梁惠王上》",
+  text:["孟子曰：「抑王興甲兵，危士臣，構怨於諸侯，然後快於心與？」王曰：「否，吾何快於是？將以求吾所大欲也。」","曰：「然則王之所大欲可知已：欲辟土地，朝秦楚，蒞中國而撫四夷也。以若所為，求若所欲，猶緣木而求魚也。」王曰：「若是其甚與？」曰：「殆有甚焉。緣木求魚，雖不得魚，無後災；以若所為，求若所欲，盡心力而為之，後必有災。」"],
+  notes:[["抑","還是"],["甲兵","軍隊"],["構怨","結怨"],["辟","開拓"],["朝秦楚","使秦、楚來朝拜"],["蒞","統治"],["若","這樣"],["緣","沿著、攀爬"],["殆","恐怕"]],
+  trans:"孟子問齊宣王：難道大王要發動戰爭、讓將士陷入危險、和諸侯結仇，心裡才痛快嗎？宣王說：不是，我只是想實現我最大的願望。孟子說：那您的願望可想而知：想擴張領土、讓秦楚來朝、統治中原、安撫四方。用這種做法追求這種願望，就像爬到樹上去抓魚。宣王問：有這麼嚴重嗎？孟子說：恐怕更嚴重。爬樹抓魚頂多抓不到魚，沒有後患；用武力去求霸業，費盡心力，最後一定會有災禍。",
+  qs:[
+   {q:"「緣木而求魚」的「緣」，意思是什麼？",o:["緣分","沿著、攀爬","邊緣","因為"],a:1,e:"「緣木」是沿著樹往上爬。爬到樹上找魚，方向完全錯誤。"},
+   {q:"孟子說「殆有甚焉」，認為齊宣王的作為比緣木求魚更糟，理由是什麼？",o:["爬樹的人比捕魚的人辛苦","緣木求魚只是得不到魚，以武力求霸業卻必有後災","齊國的魚比土地更珍貴","齊宣王不肯說出自己的心願"],a:1,e:"文中直接對比：「緣木求魚，雖不得魚，無後災；以若所為……後必有災。」"},
+   {q:"下列「緣木求魚」的用法，何者正確？",o:["他緣木求魚，辛苦爬上樹頂摘到果子","她讀書緣木求魚，一步一腳印","這道菜緣木求魚，口味獨特","想靠每天熬夜打電動來提高成績，無異緣木求魚"],a:3,e:"「緣木求魚」比喻方法錯誤，不可能達到目的。熬夜打電動與提高成績方向相反，用法正確。"}
+  ]},
+{ id:"s7", title:"一傅眾咻", idiom:"一傅眾咻", src:"《孟子・滕文公下》",
+  text:["孟子謂戴不勝曰：「子欲子之王之善與？我明告子。有楚大夫於此，欲其子之齊語也，則使齊人傅諸？使楚人傅諸？」曰：「使齊人傅之。」","曰：「一齊人傅之，眾楚人咻之，雖日撻而求其齊也，不可得矣；引而置之莊嶽之間數年，雖日撻而求其楚，亦不可得矣。子謂薛居州，善士也，使之居於王所。在於王所者，長幼卑尊皆薛居州也，王誰與為不善？在王所者，長幼卑尊皆非薛居州也，王誰與為善？一薛居州，獨如宋王何？」"],
+  notes:[["戴不勝","宋國大臣"],["之齊語","學說齊國話"],["傅","教導"],["咻","喧擾"],["撻","鞭打"],["莊嶽","齊國都城熱鬧的街里"],["薛居州","宋國的賢士"],["獨如……何","又能把……怎麼樣"]],
+  trans:"孟子對戴不勝說：你希望你的君王向善嗎？我明白告訴你。有個楚國大夫想讓兒子學齊國話，該請齊國人教，還是楚國人教？答：請齊國人。孟子說：一個齊國人教他，一群楚國人在旁邊吵他，就算天天打他要他說齊語也做不到；如果把他帶到齊國熱鬧的街坊住上幾年，就算天天打他要他說楚語也做不到。你說薛居州是好人，讓他待在君王身邊。如果君王身邊上上下下都是薛居州這樣的人，君王跟誰去做壞事？如果都不是，君王又跟誰去做好事？只有一個薛居州，能對宋王起什麼作用呢？",
+  qs:[
+   {q:"「一齊人傅之，眾楚人咻之」的「咻」，意思是什麼？",o:["教導","休息","喧擾","讚美"],a:2,e:"「咻」是喧嘩吵鬧、干擾。成語「一傅眾咻」比喻學習時干擾太多，難以成功。"},
+   {q:"孟子舉楚大夫之子學齊語的例子，主要想說明什麼？",o:["學外語一定要出國","環境對人影響極大；君王身邊只有一位賢士，難以使君王向善","楚國人不如齊國人聰明","嚴格打罵才能學好"],a:1,e:"學語言只是比喻，孟子真正要說的是後半段：君王身邊的人多數是誰，決定君王會變成什麼樣。"},
+   {q:"「一薛居州，獨如宋王何？」意思是什麼？",o:["薛居州獨自一人去拜見宋王","薛居州和宋王是同一類人","只有一個薛居州，又能把宋王怎麼樣呢？","宋王只信任薛居州一個人"],a:2,e:"「如……何」是「把……怎麼樣」的句式。孟子用反問強調：只靠一個好人，改變不了君王。"}
+  ]},
+{ id:"s8", title:"校人烹魚", idiom:"得其所哉", src:"《孟子・萬章上》",
+  text:["昔者有饋生魚於鄭子產，子產使校人畜之池。校人烹之，反命曰：「始舍之，圉圉焉；少則洋洋焉，攸然而逝。」子產曰：「得其所哉！得其所哉！」","校人出，曰：「孰謂子產智？予既烹而食之，曰：『得其所哉！得其所哉！』」故君子可欺以其方，難罔以非其道。"],
+  notes:[["饋","贈送"],["子產","鄭國賢相"],["校人","管理池沼的小官"],["畜","養"],["反命","回報"],["圉圉","音ㄩˇ，困而未舒的樣子"],["洋洋","舒緩自在的樣子"],["攸然","迅速的樣子"],["方","合乎情理的方法"],["罔","蒙蔽"]],
+  trans:"從前有人送活魚給鄭國的子產，子產叫管池塘的小官把魚養在池裡。小官卻把魚煮來吃了，回報說：「剛放下去時，魚還不太能動；過一會兒就悠游自在，一下子就游走了。」子產說：「牠到了合適的地方啊！」小官出來後說：「誰說子產聰明？我都把魚煮來吃了，他還說『牠到了合適的地方』。」所以君子可以被合乎情理的說法欺騙，卻很難被不合道理的事蒙蔽。",
+  qs:[
+   {q:"文中「校人」指的是什麼人？",o:["學校的教師","廚師","管理池沼的小官","校對文字的人"],a:2,e:"「校人」是古代掌管池沼、園囿的小吏。不可用現代「學校」的意思理解。"},
+   {q:"校人說魚「少則洋洋焉，攸然而逝」，他說這些話的目的是什麼？",o:["向子產回報魚已經長大","讚美池水清澈","編造放生的經過，掩飾自己把魚吃掉","勸子產多養一些魚"],a:2,e:"上文明說「校人烹之」，所以他描述魚游走的樣子，全是編出來騙子產的。"},
+   {q:"「故君子可欺以其方，難罔以非其道」，意思最接近下列何者？",o:["君子絕對不會上當","君子喜歡用巧妙的方法騙人","君子不懂得變通","君子可以被合乎情理的說法欺騙，卻難以被不合道理的事蒙蔽"],a:3,e:"校人的說法合乎常理（魚放進池裡本會游走），子產才會相信。這並非子產不聰明，而是君子以誠待人。"}
+  ]},
+{ id:"s9", title:"王顧左右而言他", idiom:"顧左右而言他", src:"《孟子・梁惠王下》",
+  text:["孟子謂齊宣王曰：「王之臣有託其妻子於其友，而之楚遊者。比其反也，則凍餒其妻子，則如之何？」王曰：「棄之。」","曰：「士師不能治士，則如之何？」王曰：「已之。」","曰：「四境之內不治，則如之何？」王顧左右而言他。"],
+  notes:[["託","託付"],["妻子","妻子和兒女"],["之","往"],["比","等到"],["反","同「返」"],["凍餒","挨凍受餓"],["棄","斷絕交情"],["士師","掌管刑獄的官"],["已","罷免"]],
+  trans:"孟子問齊宣王：如果您有個臣子把妻兒託付給朋友，自己到楚國遊歷，回來時發現妻兒在挨凍受餓，該怎麼辦？宣王說：和那朋友絕交。孟子又問：如果掌管刑獄的長官管不好部下，該怎麼辦？宣王說：撤他的職。孟子再問：如果整個國家治理不好，該怎麼辦？宣王左右張望，把話題扯到別的事上去了。",
+  qs:[
+   {q:"「比其反也」的「比」，意思是什麼？",o:["等到","比較","並列","比喻"],a:0,e:"「比其反也」＝等到他回來的時候。「比」作「等到」解。"},
+   {q:"孟子連續提出三個問題，這種論說方式的特色是什麼？",o:["開門見山，直接批評齊王","引用古代聖王的事蹟","講寓言故事作比喻","由小到大、由遠及近，引導齊王自己得出結論"],a:3,e:"從朋友失職、官員失職，一路推到國君失職，讓齊王先下判斷，最後無法自圓其說。"},
+   {q:"「王顧左右而言他」，顯示齊宣王當時怎麼了？",o:["虛心認錯","勃然大怒","理屈詞窮，迴避問題","專心聆聽"],a:2,e:"依前兩題的邏輯，答案應是「國君該下台」，齊王答不下去，只好轉移話題。今日比喻迴避問題、答非所問。"}
+  ]},
+{ id:"s10", title:"孟母三遷", idiom:"孟母三遷", src:"《列女傳・母儀傳》（孟子的故事）",
+  text:["鄒孟軻之母也，號孟母。其舍近墓。孟子之少也，嬉遊為墓間之事，踊躍築埋。孟母曰：「此非吾所以居處子也。」乃去，舍市傍。其嬉戲為賈人衒賣之事。孟母又曰：「此非吾所以居處子也。」","復徙舍學宮之傍。其嬉遊乃設俎豆，揖讓進退。孟母曰：「真可以居吾子矣。」遂居之。及孟子長，學六藝，卒成大儒之名。君子謂孟母善以漸化。"],
+  notes:[["舍","居住"],["踊躍築埋","跳來跳去，模仿築墳埋葬"],["賈人","商人"],["衒賣","沿街叫賣"],["學宮","學校"],["俎豆","祭祀用的禮器"],["揖讓進退","作揖、謙讓等禮節"],["漸化","逐漸感化"]],
+  trans:"孟子的母親稱為孟母。起初家住墓地附近，小孟子就玩起築墳下葬的遊戲。孟母說：這不是適合孩子住的地方。於是搬到市場旁，孟子又學商人叫賣。孟母又說：這裡也不適合。再搬到學校旁，孟子便擺起祭器，學習作揖謙讓的禮節。孟母說：這裡才真正適合我的孩子。孟子長大後學習六藝，終於成為大儒。君子稱讚孟母善於用環境逐漸感化孩子。",
+  qs:[
+   {q:"孟子小時候住在墓地旁，「踊躍築埋」，他是在模仿什麼？",o:["商人叫賣","喪葬埋墓之事","祭祀禮儀","蓋房子"],a:1,e:"住在墓地附近，常見送葬、築墳，孩子就模仿起來。這正是環境影響孩子的第一個例證。"},
+   {q:"搬到學宮旁後，孟子「設俎豆，揖讓進退」，表示他開始學習什麼？",o:["烹飪","經商","禮儀","武藝"],a:2,e:"俎豆是祭祀禮器，揖讓進退是禮節動作，表示孟子受學校環境影響，開始學禮。"},
+   {q:"「君子謂孟母善以漸化」，下列哪一句最能呼應這個道理？",o:["青出於藍，更勝於藍","近朱者赤，近墨者黑","學而時習之","玉不琢，不成器"],a:1,e:"孟母三遷強調環境對人潛移默化的影響，與「近朱者赤，近墨者黑」最相近；也可和〈一傅眾咻〉互相對照。"}
+  ]}
+];
+const LET = ["(A)","(B)","(C)","(D)"];
+const TOTAL_Q = STORIES.reduce((s,x)=>s+x.qs.length,0);
+
+/* ===================== 狀態 ===================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let me = null;           // {cls, seat, name}
+let records = [];        // [{id, cls, seat, name, story, best, total, attempts, firstAns, lastAns, ts}]
+let mode = "local";      // "db" | "local"
+let db = null, userCap = null, canWrite = true, canAdmin = false;
+let view = "home", current = null, picks = [], submitted = false, lastSaved = null;
+
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function seg(s){return encodeURIComponent(String(s).trim()).replace(/%/g,"~").replace(/[^A-Za-z0-9_\-.~:@+]/g,"_")}
+function keyOf(cls,seat,story){return seg(cls)+"_"+seg(seat)+"_"+story}
+
+/* ===================== 儲存層 ===================== */
+function setStatus(){
+  const st=$("status");
+  if(mode==="db"&&canWrite){st.textContent="班級成績已連線";st.className="status ok"}
+  else if(mode==="db"){st.textContent="僅可檢視成績";st.className="status"}
+  else if(mode==="sheet"){st.textContent=sheetOk?"班級成績已連線":"成績連線中…";st.className="status"+(sheetOk?" ok":"")}
+  else {st.textContent="本機模式";st.className="status"}
+}
+function loadLocal(){records = lsGet("mz_records",[]);}
+/* ---- Google 試算表模式（放在 GitHub Pages 時使用）---- */
+const SHEET_API = (typeof window!=="undefined" && window.MZ_CONFIG && window.MZ_CONFIG.sheetApi) || "";
+let sheetOk=false, pollTimer=null;
+async function sheetCall(payload){
+  const r = await fetch(SHEET_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+  const j = await r.json(); if(!j.ok) throw new Error(j.error||"error"); return j;
+}
+async function sheetRefresh(){
+  try{ const j=await sheetCall({action:"list"}); records=j.records||[]; sheetOk=true; setStatus(); render(); }
+  catch(e){ sheetOk=false; $("status").textContent="成績無法連線"; $("status").className="status"; }
+}
+async function saveRecord(rec){
+  if(mode==="db"&&canWrite){
+    try{ await db.doc("scores/"+rec.id).set(stripId(rec)); return "db"; }
+    catch(e){
+      if(e&&e.code==="unavailable"){ await new Promise(r=>setTimeout(r,600+Math.random()*600)); try{await db.doc("scores/"+rec.id).set(stripId(rec));return "db"}catch(e2){} }
+      if(e&&(e.code==="invalid_argument"||e.code==="revoked")){ canWrite=false; setStatus(); }
+      return "fail";
+    }
+  }
+  if(mode==="sheet"){
+    for(let t=0;t<2;t++){
+      try{ const j=await sheetCall({action:"save",rec}); const m=j.record||rec;
+        const i=records.findIndex(r=>r.id===m.id); if(i>=0)records[i]=m; else records.push(m); return "db"; }
+      catch(e){ await new Promise(r=>setTimeout(r,800)); }
+    }
+    return "fail";
+  }
+  if(mode==="local"){
+    const i=records.findIndex(r=>r.id===rec.id); if(i>=0)records[i]=rec; else records.push(rec);
+    lsSet("mz_records",records); return "local";
+  }
+  return "fail";
+}
+async function removeRecord(id){
+  if(mode==="db"){ await db.doc("scores/"+id).delete(); }
+  else { records=records.filter(r=>r.id!==id); lsSet("mz_records",records); }
+}
+function stripId(r){const o={...r};delete o.id;return o}
+
+async function initDb(){
+  if(SHEET_API){
+    mode="sheet"; setStatus(); await sheetRefresh();
+    pollTimer=setInterval(()=>{ if(view==="scores"&&!document.hidden) sheetRefresh(); },20000);
+    return;
+  }
+  try{
+    db = await claude.use("db");
+    userCap = await claude.use("user");
+  }catch(e){db=null}
+  if(!db){ mode="local"; loadLocal(); setStatus(); render(); return; }
+  mode="db";
+  try{ canAdmin = !!(userCap && (await userCap.canEdit())); }catch(e){}
+  try{ const w = userCap ? await userCap.can("data.write") : null; if(w===false) canWrite=false; }catch(e){}
+  setStatus();
+  let gotIt=false;
+  const timer=setTimeout(()=>{ if(!gotIt){ $("status").textContent="成績暫時無法連線"; } },10000);
+  db.collection("scores").onSnapshot(snap=>{
+    records = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!snap.metadata.fromCache){gotIt=true;clearTimeout(timer);setStatus();}
+    render();
+  }, err=>{ clearTimeout(timer); $("status").textContent="成績無法連線"; });
+}
+
+/* ===================== 身分 ===================== */
+function showLogin(){
+  const m=me||{};
+  $("inCls").value=m.cls||""; $("inSeat").value=m.seat||""; $("inName").value=m.name||"";
+  $("loginErr").textContent=""; $("loginMask").classList.remove("hide"); setTimeout(()=>$("inCls").focus(),50);
+}
+$("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const cls=$("inCls").value.trim(), seat=parseInt($("inSeat").value,10), name=$("inName").value.trim();
+  if(!cls||!seat||seat<1||!name){$("loginErr").textContent="三個欄位都要填喔";return}
+  me={cls,seat,name}; lsSet("mz_me",me); $("loginMask").classList.add("hide"); render();
+});
+$("changeMe").onclick=showLogin;
+
+/* ===================== 導覽 ===================== */
+function go(v){ view=v; if(v!=="quiz")current=null; render(); window.scrollTo(0,0); try{ if(v==="scores")history.replaceState(null,"","#scores"); else if(v==="home")history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
+$("tabHome").onclick=()=>go("home");
+$("tabScores").onclick=()=>{ go("scores"); if(mode==="sheet") sheetRefresh(); };
+
+function myRec(story){ if(!me)return null; return records.find(r=>r.id===keyOf(me.cls,me.seat,story))||null; }
+
+function render(){
+  $("meText").innerHTML = me ? `<b>${esc(me.cls)}</b> 班 ${esc(me.seat)} 號 <b>${esc(me.name)}</b>` : "尚未登記";
+  $("tabHome").classList.toggle("on",view!=="scores");
+  $("tabScores").classList.toggle("on",view==="scores");
+  $("viewHome").classList.toggle("hide",view!=="home");
+  $("viewQuiz").classList.toggle("hide",view!=="quiz");
+  $("viewScores").classList.toggle("hide",view!=="scores");
+  if(view==="home")renderHome();
+  if(view==="scores")renderScores();
+}
+
+function renderHome(){
+  $("grid").innerHTML = STORIES.map((s,i)=>{
+    const r=myRec(s.id); let b=`<span class="badge">未作答</span>`;
+    if(r){ b = r.best===r.total?`<span class="badge full">滿分 ${r.best}/${r.total}</span>`:`<span class="badge part">最佳 ${r.best}/${r.total}</span>`; }
+    return `<button class="story" data-id="${s.id}"><span class="thumb">${COMICS[s.id]?comicSVG(COMICS[s.id][0]):""}</span><span class="no">第 ${["一","二","三","四","五","六","七","八","九","十"][i]} 則</span><span class="t">${s.title}</span><span class="src">${s.src}</span><span class="foot"><span>${s.qs.length} 題</span>${b}</span></button>`;
+  }).join("");
+  document.querySelectorAll(".story").forEach(el=>el.onclick=()=>openStory(el.dataset.id));
+}
+
+/* ===================== 作答 ===================== */
+let showNotes=false, showTrans=false, ptab="text", startAt=0;
+function openStory(id){
+  if(!me){showLogin();return}
+  current=STORIES.find(s=>s.id===id); picks=new Array(current.qs.length).fill(null); submitted=false; lastSaved=null; showNotes=false; showTrans=false; ptab="text"; startAt=Date.now();
+  view="quiz"; render(); renderQuiz(); window.scrollTo(0,0);
+}
+function renderQuiz(){
+  const s=current, idx=STORIES.indexOf(s), n=s.qs.length;
+  const correct = submitted ? s.qs.reduce((c,q,i)=>c+(picks[i]===q.a?1:0),0) : 0;
+  let res="";
+  if(submitted){
+    const msgs = correct===n?"全對！孟子都要點頭稱讚。":correct>=n-1?"很不錯，看看錯的那題解析。":"再讀一次原文，對照白話大意再挑戰。";
+    let saved="";
+    if(lastSaved==="db") saved="✓ 已存入班級成績";
+    else if(lastSaved==="local") saved="✓ 已存在這台裝置（本機模式）";
+    else if(lastSaved==="fail") saved="無法直接存入班級成績，請把下面的成績碼傳給老師：";
+    const codeBox = lastSaved==="fail" ? `<div class="code" id="codeBox">${esc(makeCode())}</div><div class="actions" style="margin-top:8px"><button class="btn ghost" style="color:#fff;border-color:#fff;padding:6px 14px" id="copyCode">複製成績碼</button></div>` : "";
+    res = `<div class="result"><div class="big">${correct}<small> / ${n}</small></div><div class="msg"><div>${msgs}</div><div class="saved">${saved||"儲存中…"}</div>${codeBox}</div></div>`;
+  }
+  const qsHtml = s.qs.map((q,i)=>{
+    const opts=q.o.map((t,j)=>{
+      let cls="opt"; if(picks[i]===j)cls+=" sel";
+      if(submitted){ if(j===q.a)cls+=" right"; else if(picks[i]===j)cls+=" wrong"; }
+      return `<button class="${cls}" data-q="${i}" data-o="${j}" ${submitted?"disabled":""}><span class="L">${LET[j]}</span><span>${t}</span></button>`;
+    }).join("");
+    const ok=picks[i]===q.a;
+    const exp = submitted?`<div class="exp"><span class="v ${ok?"r":"w"}">${ok?"答對了。":"答案是 "+LET[q.a]+"。"}</span>${q.e}</div>`:"";
+    return `<div class="q"><div class="stem"><span class="n">${i+1}.</span>${q.q}</div>${opts}${exp}</div>`;
+  }).join("");
+  const answered=picks.filter(p=>p!==null).length;
+  const next = STORIES[idx+1];
+  const actions = submitted
+    ? `<div class="actions"><button class="btn ghost" id="retry">再做一次</button>${next?`<button class="btn" id="nextBtn">下一則：${next.title} →</button>`:`<button class="btn" id="toScores">看班級成績 →</button>`}</div>`
+    : `<div class="actions"><button class="btn red" id="submitBtn" ${answered<n?"disabled":""}>交卷</button><span class="hint">${answered<n?`還有 ${n-answered} 題未作答`:"全部作答完成"}</span></div>`;
+  $("viewQuiz").innerHTML = `
+    <button class="back" id="backBtn">← 回到篇章</button>
+    <div class="quiz">
+      <article class="passage">
+        <span class="idiom">${s.idiom}</span>
+        <h2>${s.title}</h2>
+        <div class="src">${s.src}</div>
+        <div class="ptabs"><button id="pText" class="${ptab==="text"?"on":""}">原文</button><button id="pComic" class="${ptab==="comic"?"on":""}">四格漫畫</button></div>
+        ${ptab==="comic"
+          ? `<div class="comic">${(COMICS[s.id]||[]).map((p,i)=>`<div class="panel4">${comicSVG(p)}<div class="cap"><b>${i+1}</b>${p.cap}</div></div>`).join("")}</div>`
+          : `<div class="text">${s.text.map(p=>`<p>${p}</p>`).join("")}</div>`}
+        <div class="toggles ${ptab==="comic"?"hide":""}">
+          <button class="chip" id="tNotes">${showNotes?"收起注釋":"看注釋"}</button>
+          <button class="chip" id="tTrans" ${submitted?"":"disabled title='交卷後開放'"}>${submitted?(showTrans?"收起白話":"看白話大意"):"白話大意（交卷後開放）"}</button>
+        </div>
+        ${showNotes&&ptab==="text"?`<div class="notes">${s.notes.map(([k,v])=>`<div><b>${k}</b>：${v}</div>`).join("")}</div>`:""}
+        ${submitted&&showTrans&&ptab==="text"?`<div class="trans">${s.trans}</div>`:""}
+      </article>
+      <div class="qs">
+        ${res}
+        <p class="lead">閱讀左方〈${s.title}〉，回答第 1～${n} 題：</p>
+        ${qsHtml}
+        ${actions}
+      </div>
+    </div>`;
+  $("backBtn").onclick=()=>go("home");
+  $("pText").onclick=()=>{ptab="text";renderQuiz()};
+  $("pComic").onclick=()=>{ptab="comic";renderQuiz()};
+  $("tNotes").onclick=()=>{showNotes=!showNotes;renderQuiz()};
+  if(submitted)$("tTrans").onclick=()=>{showTrans=!showTrans;renderQuiz()};
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(submitted)return; picks[+b.dataset.q]=+b.dataset.o; renderQuiz(); });
+  if($("submitBtn"))$("submitBtn").onclick=submit;
+  if($("retry"))$("retry").onclick=()=>openStory(s.id);
+  if($("nextBtn"))$("nextBtn").onclick=()=>openStory(next.id);
+  if($("toScores"))$("toScores").onclick=()=>go("scores");
+  if($("copyCode"))$("copyCode").onclick=async e=>{try{await navigator.clipboard.writeText(makeCode());e.target.textContent="已複製！"}catch(err){e.target.textContent="請長按上方文字複製"}};
+}
+let pendingRec=null;
+function makeCode(){
+  const r=pendingRec; if(!r)return "";
+  const o={c:r.cls,s:r.seat,n:r.name,k:r.story,b:r.best,t:r.total,a:r.attempts,f:r.firstAns,l:r.lastAns,ts:r.ts,g:r.log};
+  return "MZ1."+btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+}
+async function submit(){
+  const s=current, n=s.qs.length;
+  const score=s.qs.reduce((c,q,i)=>c+(picks[i]===q.a?1:0),0);
+  const id=keyOf(me.cls,me.seat,s.id), old=records.find(r=>r.id===id);
+  const rec = {
+    id, cls:me.cls, seat:me.seat, name:me.name, story:s.id, total:n,
+    best: old?Math.max(old.best,score):score,
+    attempts: (old?old.attempts:0)+1,
+    firstAns: old&&Array.isArray(old.firstAns)?old.firstAns:picks.slice(),
+    lastAns: picks.slice(), ts: Date.now(),
+    firstTs: old&&old.firstTs?old.firstTs:Date.now(),
+    log: [...(old&&Array.isArray(old.log)?old.log:[]), {ts:Date.now(), dur:Math.round((Date.now()-startAt)/1000), sc:score, ans:picks.slice()}].slice(-20)
+  };
+  pendingRec=rec; submitted=true; lastSaved=null; renderQuiz();
+  window.scrollTo({top:0,behavior:"smooth"});
+  lastSaved = await saveRecord(rec);
+  if(view==="quiz"&&current===s) renderQuiz();
+}
+
+/* ===================== 成績 ===================== */
+let THR = lsGet("mz_thr",30);
+const pad=n=>String(n).padStart(2,"0");
+function fmtTime(ts){const d=new Date(ts);return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
+function fmtDur(s){if(s==null||isNaN(s))return "—";return s<60?`${s} 秒`:`${Math.floor(s/60)} 分 ${pad(s%60)} 秒`}
+function entriesOf(r){ return Array.isArray(r.log)&&r.log.length ? r.log : [{ts:r.ts,dur:null,sc:r.best,ans:r.lastAns||[]}]; }
+function susReason(e,total){
+  const why=[];
+  if(e.dur!=null && e.dur<THR) why.push("太快");
+  const a=e.ans||[]; if(a.length>1 && a.every(x=>x===a[0]) && e.sc<total) why.push("全選同一項");
+  return why;
+}
+function classes(){ return [...new Set(records.map(r=>String(r.cls)))].sort((a,b)=>a.localeCompare(b,"zh-Hant",{numeric:true})); }
+function renderScores(){
+  const cl=classes(), sel=$("clsSel");
+  const prev = sel.value || (me&&cl.includes(String(me.cls))?String(me.cls):cl[0]);
+  sel.innerHTML = cl.length?cl.map(c=>`<option ${c===prev?"selected":""}>${esc(c)}</option>`).join(""):`<option>（尚無資料）</option>`;
+  sel.onchange=renderScores;
+  $("scoreNote").textContent = mode==="local"?"本機模式：只顯示這台裝置上的作答紀錄（尚未設定 Google 試算表）。":"";
+  $("teacher").classList.toggle("hide", mode==="db" && !canAdmin);
+  $("pwWrap").classList.toggle("hide", mode!=="sheet");
+  const cur = cl.length?sel.value:null;
+  const rs = records.filter(r=>String(r.cls)===cur);
+  if(!rs.length){
+    $("stats").innerHTML=""; $("board").innerHTML=`<div class="empty">還沒有同學作答，成績會在交卷後出現在這裡。</div>`;
+    $("bars").innerHTML=""; $("hard").innerHTML=""; $("log").innerHTML=""; return;
+  }
+  // 依學生彙整
+  const stu={};
+  rs.forEach(r=>{
+    const k=String(r.seat); const o=stu[k]||(stu[k]={seat:r.seat,name:r.name,by:{},done:0,correct:0,ts:0});
+    o.by[r.story]=r; o.done++; o.correct+=r.best; if(r.ts>o.ts){o.ts=r.ts;o.name=r.name}
+  });
+  const list=Object.values(stu).sort((a,b)=>b.correct-a.correct||a.seat-b.seat);
+  const totalCorrect=list.reduce((s,x)=>s+x.correct,0), totalDone=rs.reduce((s,r)=>s+r.total,0);
+  const fullCount=list.filter(x=>x.done===STORIES.length).length;
+  $("stats").innerHTML=[
+    ["參與人數",list.length+" 人"],["全班答對率",Math.round(totalCorrect/totalDone*100)+"%"],
+    ["完成十篇",fullCount+" 人"],["累計作答",rs.reduce((s,r)=>s+(r.attempts||1),0)+" 次"]
+  ].map(([k,v])=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+  let rank=0,lastC=null;
+  const head=`<tr><th>名次</th><th>座號</th><th style="text-align:left">姓名</th><th>完成</th><th>累計答對</th><th>正確率</th><th>最後作答</th><th>疑似亂答</th>${STORIES.map((s,i)=>`<th title="${s.title}">${i+1}</th>`).join("")}</tr>`;
+  const rows=list.map((x,i)=>{
+    if(x.correct!==lastC){rank=i+1;lastC=x.correct}
+    const asked=Object.values(x.by).reduce((s,r)=>s+r.total,0);
+    const cells=STORIES.map(s=>{const r=x.by[s.id]; if(!r)return `<td><span class="cell c0">–</span></td>`;
+      const p=r.best/r.total; const col=p===1?"#3f6e52":p>=.6?"#b8892f":"#a8382a";
+      return `<td><span class="cell" style="background:${col}" title="${s.title} ${r.best}/${r.total}，作答 ${r.attempts} 次">${r.best}</span></td>`}).join("");
+    const mine = me && String(me.cls)===cur && String(me.seat)===String(x.seat);
+    const ents=Object.values(x.by).flatMap(r=>entriesOf(r).map(e=>({e,t:r.total})));
+    const last=Math.max(...ents.map(o=>o.e.ts||0)); const nSus=ents.filter(o=>susReason(o.e,o.t).length).length;
+    return `<tr class="${rank===1?"top1":""} ${mine?"me-row":""}"><td class="rank">${rank}</td><td>${esc(x.seat)}</td><td class="nm">${esc(x.name)}</td><td>${x.done}/${STORIES.length}</td><td><b>${x.correct}</b> / ${TOTAL_Q}</td><td>${Math.round(x.correct/asked*100)}%</td><td class="t">${last?fmtTime(last):"—"}</td><td>${nSus?`<span class="sus">${nSus} 次</span>`:"—"}</td>${cells}</tr>`;
+  }).join("");
+  $("board").innerHTML=`<table>${head}${rows}</table><p class="hint">格子數字為該篇最高答對題數：綠＝滿分、黃＝六成以上、紅＝未達六成。</p>`;
+  renderLog(rs, list);
+  // 各篇平均
+  $("bars").innerHTML=STORIES.map(s=>{
+    const xs=rs.filter(r=>r.story===s.id); if(!xs.length)return `<div><span>${s.title}</span><span class="bar"><i style="width:0"></i></span><span class="hint">未作答</span></div>`;
+    const p=xs.reduce((a,r)=>a+r.best/r.total,0)/xs.length;
+    return `<div><span>${s.title}</span><span class="bar"><i style="width:${p*100}%"></i></span><span>${Math.round(p*100)}%<small class="hint"> ${xs.length}人</small></span></div>`;
+  }).join("");
+  // 易錯題（第一次作答）
+  const hard=[];
+  STORIES.forEach(s=>{
+    const xs=rs.filter(r=>r.story===s.id&&Array.isArray(r.firstAns)); if(xs.length<1)return;
+    s.qs.forEach((q,i)=>{
+      const wrong=xs.filter(r=>r.firstAns[i]!==q.a);
+      const cnt=[0,0,0,0]; wrong.forEach(r=>{if(r.firstAns[i]!=null)cnt[r.firstAns[i]]++});
+      const top=cnt.indexOf(Math.max(...cnt));
+      hard.push({s,i,q,rate:wrong.length/xs.length,n:xs.length,top:wrong.length?top:null});
+    });
+  });
+  hard.sort((a,b)=>b.rate-a.rate);
+  const h=hard.filter(x=>x.rate>0).slice(0,5);
+  $("hard").innerHTML = h.length? h.map(x=>`<li>〈${x.s.title}〉第 ${x.i+1} 題：${x.q.q} <span class="pct">錯 ${Math.round(x.rate*100)}%</span><br><span class="hint">正解 ${LET[x.q.a]} ${x.q.o[x.q.a]}${x.top!=null?`；最多人誤選 ${LET[x.top]} ${x.q.o[x.top]}`:""}（${x.n} 人作答）</span></li>`).join("") : `<li class="hint" style="list-style:none">目前沒有人答錯，太厲害了！</li>`;
+}
+
+let logRows=[];
+function renderLog(rs, list){
+  $("thr").value=THR;
+  const ss=$("logSeat"), keep=ss.value;
+  ss.innerHTML=`<option value="">全部</option>`+list.slice().sort((a,b)=>a.seat-b.seat).map(x=>`<option value="${esc(x.seat)}" ${String(x.seat)===keep?"selected":""}>${esc(x.seat)} ${esc(x.name)}</option>`).join("");
+  const only=$("onlySus").checked, seatF=ss.value;
+  const title=Object.fromEntries(STORIES.map(s=>[s.id,s.title]));
+  logRows=[];
+  rs.forEach(r=>entriesOf(r).forEach((e,i)=>logRows.push({r,e,n:i+1,why:susReason(e,r.total)})));
+  logRows.sort((a,b)=>b.e.ts-a.e.ts);
+  const shown=logRows.filter(x=>(!only||x.why.length)&&(!seatF||String(x.r.seat)===seatF));
+  if(!shown.length){$("log").innerHTML=`<div class="empty">${only?"目前沒有疑似亂答的紀錄。":"還沒有作答紀錄。"}</div>`;return}
+  $("log").innerHTML=`<table><tr><th>完成時間</th><th>座號</th><th style="text-align:left">姓名</th><th style="text-align:left">篇章</th><th>第幾次</th><th>得分</th><th>用時</th><th>作答</th><th>標記</th></tr>${
+    shown.slice(0,300).map(x=>`<tr class="${x.why.length?"sus-row":""}"><td class="t">${fmtTime(x.e.ts)}</td><td>${esc(x.r.seat)}</td><td class="nm">${esc(x.r.name)}</td><td class="nm">${title[x.r.story]||""}</td><td>${x.n}</td><td>${x.e.sc} / ${x.r.total}</td><td class="t">${fmtDur(x.e.dur)}</td><td class="t">${(x.e.ans||[]).map(a=>a==null?"–":"ABCD"[a]).join(" ")}</td><td>${x.why.map(w=>`<span class="sus">${w}</span>`).join(" ")||""}</td></tr>`).join("")
+  }</table>${shown.length>300?`<p class="hint">只顯示最近 300 筆。</p>`:""}`;
+}
+$("thr").onchange=()=>{const v=Math.max(5,Math.min(300,parseInt($("thr").value,10)||30));THR=v;lsSet("mz_thr",v);renderScores()};
+$("onlySus").onchange=renderScores;
+$("logSeat").onchange=renderScores;
+$("copyLog").onclick=async()=>{
+  const title=Object.fromEntries(STORIES.map(s=>[s.id,s.title]));
+  const rows=[["完成時間","座號","姓名","篇章","第幾次","得分","滿分","用時(秒)","作答","標記"].join("\t"),
+    ...logRows.map(x=>[new Date(x.e.ts).toLocaleString("zh-TW",{hour12:false}),x.r.seat,x.r.name,title[x.r.story],x.n,x.e.sc,x.r.total,x.e.dur??"",(x.e.ans||[]).map(a=>a==null?"-":"ABCD"[a]).join(""),x.why.join("、")].join("\t"))];
+  try{await navigator.clipboard.writeText(rows.join("\n"));$("logMsg").textContent="已複製，可貼到 Excel。"}catch(e){$("logMsg").textContent="瀏覽器不允許複製"}
+};
+
+/* 教師工具 */
+$("importBtn").onclick=async()=>{
+  const lines=$("codes").value.split(/\s+/).filter(x=>x.startsWith("MZ1."));
+  let ok=0,bad=0;
+  for(const ln of lines){
+    try{
+      const o=JSON.parse(decodeURIComponent(escape(atob(ln.slice(4)))));
+      const st=STORIES.find(s=>s.id===o.k); if(!st||!o.c||!o.s)throw 0;
+      const id=keyOf(o.c,o.s,o.k), old=records.find(r=>r.id===id);
+      const clamp=v=>Math.max(0,Math.min(st.qs.length,+v||0));
+      const rec={id,cls:String(o.c).slice(0,10),seat:+o.s,name:String(o.n||"").slice(0,12),story:o.k,total:st.qs.length,
+        best:Math.max(clamp(o.b),old?old.best:0),attempts:Math.max(+o.a||1,old?old.attempts:0),
+        firstAns:old&&old.firstAns?old.firstAns:(Array.isArray(o.f)?o.f.slice(0,st.qs.length):[]),lastAns:Array.isArray(o.l)?o.l.slice(0,st.qs.length):[],ts:+o.ts||Date.now()};
+      const lg=[...(old&&Array.isArray(old.log)?old.log:[])];
+      (Array.isArray(o.g)?o.g:[]).forEach(e=>{ if(e&&+e.ts&&!lg.some(x=>x.ts===+e.ts)) lg.push({ts:+e.ts,dur:+e.dur||0,sc:clamp(e.sc),ans:Array.isArray(e.ans)?e.ans.slice(0,st.qs.length):[]}) });
+      lg.sort((a,b)=>a.ts-b.ts); rec.log=lg.slice(-20); rec.firstTs=lg.length?lg[0].ts:rec.ts;
+      const r=await saveRecord(rec); if(r==="fail")throw 0; ok++;
+    }catch(e){bad++}
+  }
+  $("importMsg").textContent=`匯入 ${ok} 筆${bad?`，${bad} 筆無法辨識`:""}`;
+  if(ok)$("codes").value="";
+  render();
+};
+$("copyCsv").onclick=async()=>{
+  const cur=$("clsSel").value; const rs=records.filter(r=>String(r.cls)===cur);
+  const stu={}; rs.forEach(r=>{const o=stu[r.seat]||(stu[r.seat]={seat:r.seat,name:r.name,by:{}});o.by[r.story]=r});
+  const head=["座號","姓名",...STORIES.map(s=>s.title),"累計答對","總題數"].join("\t");
+  const rows=Object.values(stu).sort((a,b)=>a.seat-b.seat).map(x=>{
+    const c=STORIES.map(s=>x.by[s.id]?x.by[s.id].best:"");
+    return [x.seat,x.name,...c,c.reduce((a,b)=>a+(+b||0),0),TOTAL_Q].join("\t")});
+  try{await navigator.clipboard.writeText([head,...rows].join("\n"));$("toolMsg").textContent="已複製，可直接貼到 Excel 或試算表。"}catch(e){$("toolMsg").textContent="瀏覽器不允許複製"}
+};
+let clearArm=false;
+$("clearCls").onclick=async()=>{
+  const cur=$("clsSel").value;
+  if(!clearArm){clearArm=true;$("clearCls").textContent=`確定清除 ${cur} 班？再按一次`;setTimeout(()=>{clearArm=false;$("clearCls").textContent="清除本班全部紀錄"},4000);return}
+  clearArm=false; $("clearCls").textContent="清除本班全部紀錄";
+  if(mode==="sheet"){
+    try{ const j=await sheetCall({action:"clearClass",cls:cur,password:$("tpw").value}); $("toolMsg").textContent=`已清除 ${j.removed} 筆`; await sheetRefresh(); }
+    catch(e){ $("toolMsg").textContent = String(e.message).includes("password")?"教師密碼不正確":"清除失敗，請稍後再試"; }
+    return;
+  }
+  const ids=records.filter(r=>String(r.cls)===cur).map(r=>r.id); let n=0;
+  for(const id of ids){try{await removeRecord(id);n++}catch(e){}}
+  $("toolMsg").textContent=`已清除 ${n} 筆`; render();
+};
+
+/* ===================== 啟動 ===================== */
+me = lsGet("mz_me",null);
+if(location.hash==="#scores")view="scores";
+render();
+if(!me)showLogin();
+initDb();
+</script>
+</body>
+</html>
