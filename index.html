@@ -222,10 +222,11 @@ td.t{font-variant-numeric:tabular-nums;color:#4d433a}
     <label class="field">姓名<input type="text" id="inName" maxlength="12" placeholder="王小明" required></label>
     <div class="err" id="loginErr"></div>
     <button class="btn" style="width:100%">開始</button>
+    <button type="button" class="link" id="teacherSkip" style="display:block;margin:14px auto 0">我是老師，先略過，直接看班級成績 →</button>
   </form>
 </div>
 
-<script src="config.js"></script>
+<script src="config.js?v=2"></script>
 <script>
 /* ===================== 四格漫畫繪圖工具 ===================== */
 const INK="#3a302a", SKIN="#f6dcbc";
@@ -592,6 +593,7 @@ $("loginForm").addEventListener("submit",e=>{
   me={cls,seat,name}; lsSet("mz_me",me); $("loginMask").classList.add("hide"); render();
 });
 $("changeMe").onclick=showLogin;
+$("teacherSkip").onclick=()=>{ $("loginMask").classList.add("hide"); go("scores"); if(mode==="sheet") sheetRefresh(); };
 
 /* ===================== 導覽 ===================== */
 function go(v){ view=v; if(v!=="quiz")current=null; render(); window.scrollTo(0,0); try{ if(v==="scores")history.replaceState(null,"","#scores"); else if(v==="home")history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
@@ -871,7 +873,7 @@ $("clearCls").onclick=async()=>{
 me = lsGet("mz_me",null);
 if(location.hash==="#scores")view="scores";
 render();
-if(!me)showLogin();
+if(!me && view!=="scores")showLogin();
 initDb();
 </script>
 </body>
