@@ -4,7 +4,7 @@
  * 設定步驟請看 README.md。
  */
 
-// ★ 請改成你自己的教師密碼（只用來「清除本班全部紀錄」）
+// ★ 請改成你自己的教師密碼（用來登入老師檢視、清除本班紀錄）
 const TEACHER_PASSWORD = "change-me";
 
 const SHEET_RECORDS = "成績";      // 每位學生每篇一列（程式使用，請勿手動改欄位）
@@ -21,13 +21,28 @@ function doGet() {
 function doPost(e) {
   try {
     const req = JSON.parse(e.postData.contents || "{}");
-    if (req.action === "list") return json_({ ok: true, records: listRecords_() });
+    if (req.action === "list") {
+      const t = isTeacher_(req.password);
+      if (req.password && !t) return json_({ ok: false, error: "wrong password" });
+      const recs = listRecords_();
+      return json_({ ok: true, teacher: t, records: t ? recs : recs.map(publicView_) });
+    }
     if (req.action === "save") return json_({ ok: true, record: saveRecord_(req.rec) });
     if (req.action === "clearClass") return json_({ ok: true, removed: clearClass_(req.cls, req.password) });
     return json_({ ok: false, error: "unknown action" });
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message || err) });
   }
+}
+
+// 老師密碼是否正確（還沒改掉 change-me 時一律視為不正確）
+function isTeacher_(pw) {
+  return TEACHER_PASSWORD !== "change-me" && pw !== undefined && pw !== null && String(pw) === TEACHER_PASSWORD;
+}
+
+// 學生看得到的欄位：只有排行榜需要的資料，不含作答時間、作答內容
+function publicView_(r) {
+  return { id: r.id, cls: r.cls, seat: r.seat, name: r.name, story: r.story, total: r.total, best: r.best, attempts: r.attempts };
 }
 
 function json_(o) {
@@ -114,7 +129,7 @@ function saveRecord_(rec) {
 }
 
 function clearClass_(cls, password) {
-  if (String(password) !== TEACHER_PASSWORD || TEACHER_PASSWORD === "change-me") throw new Error("wrong password");
+  if (!isTeacher_(password)) throw new Error("wrong password");
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {

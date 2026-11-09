@@ -104,7 +104,7 @@ nav button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(
 .stat .k{font-size:13px;color:var(--muted)}
 .stat .v{font-family:var(--serif);font-size:28px;font-weight:900}
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}
-select,input[type=text],input[type=number],textarea{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;color:var(--ink)}
+select,input[type=text],input[type=password],input[type=number],textarea{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;color:var(--ink)}
 .tablewrap{overflow-x:auto;margin:0 -4px}
 table{border-collapse:collapse;width:100%;font-size:14px;min-width:640px}
 th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
@@ -180,9 +180,16 @@ td.t{font-variant-numeric:tabular-nums;color:#4d433a}
       <label>班級 <select id="clsSel"></select></label>
       <span class="hint" id="scoreNote"></span>
     </div>
+    <div class="panel hide" id="tLogin" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px">
+      <span id="tLoginText" style="font-size:14px;color:var(--muted)">老師登入後可看作答紀錄、疑似亂答與易錯題分析</span>
+      <input type="password" id="tLoginPw" placeholder="教師密碼" autocomplete="current-password" style="width:150px">
+      <button class="btn" id="tLoginBtn" style="padding:6px 16px">登入</button>
+      <button class="btn ghost hide" id="tLogoutBtn" style="padding:6px 16px">登出</button>
+      <span class="err" id="tLoginErr"></span>
+    </div>
     <div class="stats" id="stats"></div>
     <div class="panel"><h3>排行榜</h3><div class="tablewrap" id="board"></div></div>
-    <div class="panel"><h3>作答紀錄（完成時間）</h3>
+    <div class="panel tonly"><h3>作答紀錄（完成時間）</h3>
       <div class="logctl">
         <label>用時少於 <input type="number" id="thr" min="5" max="300" step="5"> 秒標記為「太快」</label>
         <label><input type="checkbox" id="onlySus"> 只看疑似亂答</label>
@@ -192,8 +199,8 @@ td.t{font-variant-numeric:tabular-nums;color:#4d433a}
       <div class="tablewrap" id="log"></div>
       <p class="hint" style="margin:8px 0 0">用時＝從打開該篇到交卷的時間。疑似亂答的判斷：用時過短，或每題都選同一個選項且沒有全對。只是提醒，請老師再確認。</p>
     </div>
-    <div class="panel"><h3>各篇全班平均答對率</h3><div class="bars" id="bars"></div></div>
-    <div class="panel"><h3>全班最容易錯的題目</h3><p class="hint" style="margin:0 0 6px">以每位同學「第一次作答」統計，較能反映真實理解。</p><ol class="hard" id="hard"></ol></div>
+    <div class="panel tonly"><h3>各篇全班平均答對率</h3><div class="bars" id="bars"></div></div>
+    <div class="panel tonly"><h3>全班最容易錯的題目</h3><p class="hint" style="margin:0 0 6px">以每位同學「第一次作答」統計，較能反映真實理解。</p><ol class="hard" id="hard"></ol></div>
     <details class="teacher" id="teacher">
       <summary>教師區：匯入成績碼、匯出、清除</summary>
       <div class="panel">
@@ -204,8 +211,7 @@ td.t{font-variant-numeric:tabular-nums;color:#4d433a}
       </div>
       <div class="panel">
         <h3>匯出與清除</h3>
-        <label class="field hide" id="pwWrap" style="max-width:260px">教師密碼（清除資料用，設定在 Apps Script 裡）<input type="text" id="tpw" autocomplete="off"></label>
-        <div class="actions"><button class="btn ghost" id="copyCsv">複製本班成績（可貼到 Excel）</button><button class="btn ghost" id="clearCls" style="border-color:var(--red);color:var(--red)">清除本班全部紀錄</button><span class="hint" id="toolMsg"></span></div>
+                <div class="actions"><button class="btn ghost" id="copyCsv">複製本班成績（可貼到 Excel）</button><button class="btn ghost" id="clearCls" style="border-color:var(--red);color:var(--red)">清除本班全部紀錄</button><span class="hint" id="toolMsg"></span></div>
       </div>
     </details>
   </section>
@@ -518,13 +524,17 @@ function setStatus(){
 function loadLocal(){records = lsGet("mz_records",[]);}
 /* ---- Google 試算表模式（放在 GitHub Pages 時使用）---- */
 const SHEET_API = (typeof window!=="undefined" && window.MZ_CONFIG && window.MZ_CONFIG.sheetApi) || "";
-let sheetOk=false, pollTimer=null;
+let sheetOk=false, pollTimer=null, isTeacher=false, teacherPw=lsGet("mz_tpw","");
 async function sheetCall(payload){
   const r = await fetch(SHEET_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
   const j = await r.json(); if(!j.ok) throw new Error(j.error||"error"); return j;
 }
 async function sheetRefresh(){
-  try{ const j=await sheetCall({action:"list"}); records=j.records||[]; sheetOk=true; setStatus(); render(); }
+  try{
+    let j;
+    try{ j=await sheetCall(teacherPw?{action:"list",password:teacherPw}:{action:"list"}); }
+    catch(e){ if(teacherPw && String(e.message).includes("password")){ teacherPw=""; lsSet("mz_tpw",""); j=await sheetCall({action:"list"}); } else throw e; }
+    isTeacher=!!j.teacher; records=j.records||[]; sheetOk=true; setStatus(); render(); }
   catch(e){ sheetOk=false; $("status").textContent="成績無法連線"; $("status").className="status"; }
 }
 async function saveRecord(rec){
@@ -739,7 +749,13 @@ function renderScores(){
   sel.onchange=renderScores;
   $("scoreNote").textContent = mode==="local"?"本機模式：只顯示這台裝置上的作答紀錄（尚未設定 Google 試算表）。":"";
   $("teacher").classList.toggle("hide", mode==="db" && !canAdmin);
-  $("pwWrap").classList.toggle("hide", mode!=="sheet");
+  const full = mode!=="sheet" || isTeacher;
+  $("tLogin").classList.toggle("hide", mode!=="sheet");
+  $("tLoginPw").classList.toggle("hide", isTeacher); $("tLoginBtn").classList.toggle("hide", isTeacher); $("tLogoutBtn").classList.toggle("hide", !isTeacher);
+  $("tLoginText").textContent = isTeacher ? "✓ 已用老師身分登入" : "老師登入後可看作答紀錄、疑似亂答與易錯題分析";
+  document.querySelectorAll(".tonly").forEach(el=>el.classList.toggle("hide", !full));
+  $("stats").classList.toggle("hide", !full);
+  if(!full) $("teacher").classList.add("hide");
   const cur = cl.length?sel.value:null;
   const rs = records.filter(r=>String(r.cls)===cur);
   if(!rs.length){
@@ -760,7 +776,7 @@ function renderScores(){
     ["完成十篇",fullCount+" 人"],["累計作答",rs.reduce((s,r)=>s+(r.attempts||1),0)+" 次"]
   ].map(([k,v])=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
   let rank=0,lastC=null;
-  const head=`<tr><th>名次</th><th>座號</th><th style="text-align:left">姓名</th><th>完成</th><th>累計答對</th><th>正確率</th><th>最後作答</th><th>疑似亂答</th>${STORIES.map((s,i)=>`<th title="${s.title}">${i+1}</th>`).join("")}</tr>`;
+  const head=`<tr><th>名次</th><th>座號</th><th style="text-align:left">姓名</th><th>完成</th><th>累計答對</th><th>正確率</th>${full?"<th>最後作答</th><th>疑似亂答</th>":""}${STORIES.map((s,i)=>`<th title="${s.title}">${i+1}</th>`).join("")}</tr>`;
   const rows=list.map((x,i)=>{
     if(x.correct!==lastC){rank=i+1;lastC=x.correct}
     const asked=Object.values(x.by).reduce((s,r)=>s+r.total,0);
@@ -770,10 +786,10 @@ function renderScores(){
     const mine = me && String(me.cls)===cur && String(me.seat)===String(x.seat);
     const ents=Object.values(x.by).flatMap(r=>entriesOf(r).map(e=>({e,t:r.total})));
     const last=Math.max(...ents.map(o=>o.e.ts||0)); const nSus=ents.filter(o=>susReason(o.e,o.t).length).length;
-    return `<tr class="${rank===1?"top1":""} ${mine?"me-row":""}"><td class="rank">${rank}</td><td>${esc(x.seat)}</td><td class="nm">${esc(x.name)}</td><td>${x.done}/${STORIES.length}</td><td><b>${x.correct}</b> / ${TOTAL_Q}</td><td>${Math.round(x.correct/asked*100)}%</td><td class="t">${last?fmtTime(last):"—"}</td><td>${nSus?`<span class="sus">${nSus} 次</span>`:"—"}</td>${cells}</tr>`;
+    return `<tr class="${rank===1?"top1":""} ${mine?"me-row":""}"><td class="rank">${rank}</td><td>${esc(x.seat)}</td><td class="nm">${esc(x.name)}</td><td>${x.done}/${STORIES.length}</td><td><b>${x.correct}</b> / ${TOTAL_Q}</td><td>${Math.round(x.correct/asked*100)}%</td>${full?`<td class="t">${last?fmtTime(last):"—"}</td><td>${nSus?`<span class="sus">${nSus} 次</span>`:"—"}</td>`:""}${cells}</tr>`;
   }).join("");
   $("board").innerHTML=`<table>${head}${rows}</table><p class="hint">格子數字為該篇最高答對題數：綠＝滿分、黃＝六成以上、紅＝未達六成。</p>`;
-  renderLog(rs, list);
+  if(full) renderLog(rs, list);
   // 各篇平均
   $("bars").innerHTML=STORIES.map(s=>{
     const xs=rs.filter(r=>r.story===s.id); if(!xs.length)return `<div><span>${s.title}</span><span class="bar"><i style="width:0"></i></span><span class="hint">未作答</span></div>`;
@@ -854,13 +870,22 @@ $("copyCsv").onclick=async()=>{
     return [x.seat,x.name,...c,c.reduce((a,b)=>a+(+b||0),0),TOTAL_Q].join("\t")});
   try{await navigator.clipboard.writeText([head,...rows].join("\n"));$("toolMsg").textContent="已複製，可直接貼到 Excel 或試算表。"}catch(e){$("toolMsg").textContent="瀏覽器不允許複製"}
 };
+$("tLoginBtn").onclick=async()=>{
+  const pw=$("tLoginPw").value; if(!pw){$("tLoginErr").textContent="請輸入密碼";return}
+  $("tLoginErr").textContent="驗證中…";
+  try{ const j=await sheetCall({action:"list",password:pw}); if(!j.teacher)throw new Error("password");
+    teacherPw=pw; lsSet("mz_tpw",pw); isTeacher=true; records=j.records||[]; $("tLoginPw").value=""; $("tLoginErr").textContent=""; render(); }
+  catch(e){ $("tLoginErr").textContent = String(e.message).includes("password")?"密碼不正確":"無法連線，請稍後再試"; }
+};
+$("tLoginPw").addEventListener("keydown",e=>{ if(e.key==="Enter") $("tLoginBtn").click(); });
+$("tLogoutBtn").onclick=()=>{ teacherPw=""; lsSet("mz_tpw",""); isTeacher=false; sheetRefresh(); };
 let clearArm=false;
 $("clearCls").onclick=async()=>{
   const cur=$("clsSel").value;
   if(!clearArm){clearArm=true;$("clearCls").textContent=`確定清除 ${cur} 班？再按一次`;setTimeout(()=>{clearArm=false;$("clearCls").textContent="清除本班全部紀錄"},4000);return}
   clearArm=false; $("clearCls").textContent="清除本班全部紀錄";
   if(mode==="sheet"){
-    try{ const j=await sheetCall({action:"clearClass",cls:cur,password:$("tpw").value}); $("toolMsg").textContent=`已清除 ${j.removed} 筆`; await sheetRefresh(); }
+    try{ const j=await sheetCall({action:"clearClass",cls:cur,password:teacherPw}); $("toolMsg").textContent=`已清除 ${j.removed} 筆`; await sheetRefresh(); }
     catch(e){ $("toolMsg").textContent = String(e.message).includes("password")?"教師密碼不正確":"清除失敗，請稍後再試"; }
     return;
   }
