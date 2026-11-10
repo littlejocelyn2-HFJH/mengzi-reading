@@ -529,6 +529,70 @@ const STORIES = [
    {q:"「君子謂孟母善以漸化」，下列哪一句最能呼應這個道理？",o:["青出於藍，更勝於藍","近朱者赤，近墨者黑","學而時習之","玉不琢，不成器"],a:1,e:"孟母三遷強調環境對人潛移默化的影響，與「近朱者赤，近墨者黑」最相近；也可和〈一傅眾咻〉互相對照。"}
   ]}
 ];
+
+/* ===================== 換題用題庫（重做時使用） ===================== */
+const BANK_B = {
+ s1:[
+  {q:"「其子趨而往視之」的「趨」，意思是什麼？",o:["快步走","趨勢","追趕野獸","慢慢走"],a:0,e:"「趨」是快步走。兒子聽父親說「助苗長」，急忙跑去田裡看。"},
+  {q:"孟子說「以為無益而舍之者，不耘苗者也」，「舍之」的人犯了什麼毛病？",o:["急於求成","放棄努力、不聞不問","過度照顧","方法正確但運氣不好"],a:1,e:"「舍」是放棄。認為沒用就放著不管，連草都不除，是另一種錯誤。"},
+  {q:"下列哪一句話，與「揠苗助長」的道理最接近？",o:["循序漸進","欲速則不達","水到渠成","熟能生巧"],a:1,e:"揠苗助長是太急著要成果，反而失敗，正是「欲速則不達」。循序漸進、水到渠成則是正確的做法。"}
+ ],
+ s2:[
+  {q:"「惟弈秋之為聽」的意思是什麼？",o:["只聽弈秋的話","弈秋只聽學生的話","只有弈秋在聽","為了弈秋去聽音樂"],a:0,e:"這是賓語提前的句子，等於「惟聽弈秋」，也就是專心只聽弈秋講解。"},
+  {q:"「思援弓繳而射之」的「之」，指的是什麼？",o:["弈秋","棋盤","鴻鵠（天鵝）","另一位學生"],a:2,e:"上一句說「一心以為有鴻鵠將至」，所以他想拉弓射的是天鵝。"},
+  {q:"下列何者最符合「一暴十寒」的情形？",o:["小美每天背五個英文單字，從不間斷","小明考前熬夜讀一晚，平常完全不讀書","小華每週固定練球三次","小芳讀書時關掉手機，專心讀完"],a:1,e:"努力一下、荒廢很久，就是「一暴十寒」。其他選項都是持續或專心的好習慣。"}
+ ],
+ s3:[
+  {q:"「河內凶，則移其民於河東」的「凶」，意思是什麼？",o:["凶狠","不吉利的事","荒年，收成不好","凶手"],a:2,e:"「凶」指荒年、農作歉收。河內鬧饑荒，就把百姓遷到河東。"},
+  {q:"「直不百步耳，是亦走也」的「直」，意思是什麼？",o:["筆直","只是","正直","直接"],a:1,e:"「直」作「只是」解：只是沒跑到一百步罷了，同樣是逃跑。"},
+  {q:"梁惠王向孟子提出的疑問是什麼？",o:["為何鄰國百姓沒減少，自己的百姓也沒增加","為何魏國打仗總是失敗","為何河東常常鬧饑荒","為何士兵喜歡逃跑"],a:0,e:"惠王自認比鄰國用心，卻不見百姓增加，所以問「何也」。孟子才用打仗作比喻回答。"}
+ ],
+ s4:[
+  {q:"「今茲未能」的「今茲」，意思是什麼？",o:["今年","現在這裡","今天","這一次"],a:0,e:"「今茲」指今年，與下文「以待來年」相對。"},
+  {q:"戴盈之對減稅提出的做法是什麼？",o:["立刻廢除重稅","先減輕一些，等到明年再完全廢除","增加關卡和市場的稅","把稅改成十分抽二"],a:1,e:"原文「請輕之，以待來年，然後已」，就是先減輕、明年再停止。"},
+  {q:"下列哪一種行為，最像「月攘一雞」？",o:["他知道熬夜不好，當晚就準時睡覺","他知道遲到不對，打算從每天遲到改成每週遲到一次，下學期再改","他不知道規定，違規後立刻道歉","他每天早起運動"],a:1,e:"明知不對卻只「減量」、拖到以後才改，正是月攘一雞的態度。"}
+ ],
+ s5:[
+  {q:"「必饜酒肉而後反」的「饜」，意思是什麼？",o:["厭惡","吃飽","宴會","害怕"],a:1,e:"「饜」是吃飽、滿足。齊人每次出門都酒足飯飽才回家。"},
+  {q:"「卒之東郭墦間」的「之」，意思是什麼？",o:["的","他","往、到","這"],a:2,e:"「之」在這裡當動詞，是「往、到」。最後走到東城外的墳地。"},
+  {q:"妻子說「良人者，所仰望而終身也，今若此！」，流露出什麼情緒？",o:["驕傲得意","失望悲傷","輕鬆愉快","好奇期待"],a:1,e:"終身依靠的丈夫竟然靠乞討吃飯，妻子失望又難過，所以回家後和妾相對哭泣。"}
+ ],
+ s6:[
+  {q:"「然後快於心與」的「快」，意思是什麼？",o:["速度快","痛快、滿足","鋒利","趕快"],a:1,e:"「快於心」是心裡感到痛快。孟子反問：難道要打仗結仇才痛快嗎？"},
+  {q:"孟子推知齊宣王的「大欲」是什麼？",o:["吃得好、穿得暖","擴張領土、讓秦楚來朝、統治天下","欣賞音樂美色","有更多寵臣服侍"],a:1,e:"原文「欲辟土地，朝秦楚，蒞中國而撫四夷也」。吃穿、聲色、寵臣，宣王都說不是。"},
+  {q:"「以若所為，求若所欲」中的「若」，意思是什麼？",o:["如果","你","這樣的","好像"],a:2,e:"「若」作「這樣的」解：用這樣的做法，追求這樣的願望。"}
+ ],
+ s7:[
+  {q:"「雖日撻而求其齊也」的「撻」，意思是什麼？",o:["鞭打","到達","拜託","教導"],a:0,e:"「撻」是用鞭子或棍子打。就算天天打他，逼他說齊語，也學不會。"},
+  {q:"孟子說「引而置之莊嶽之間數年」，結果會怎樣？",o:["仍然學不會齊語","就算天天逼他說楚語，也做不到","他會忘記怎麼學習","他會吵著回楚國"],a:1,e:"在齊國的街坊住上幾年，滿耳都是齊語，反而說不回楚語了，可見環境的力量。"},
+  {q:"下列哪一句話的道理，與本文最接近？",o:["蓬生麻中，不扶而直","三人行，必有我師焉","學而不思則罔","溫故而知新"],a:0,e:"蓬草長在筆直的麻中間，不用扶也會直，強調環境影響，與一傅眾咻相同。"}
+ ],
+ s8:[
+  {q:"「子產使校人畜之池」的「畜」，意思是什麼？",o:["家畜","飼養","儲蓄","畜生"],a:1,e:"「畜」音ㄒㄩˋ，當動詞，是飼養。子產叫校人把魚養在池子裡。"},
+  {q:"子產聽完報告說「得其所哉！」，意思是什麼？",o:["牠被吃掉了，真可惜","牠到了適合牠的地方啊","你事情辦得好，有賞","魚終於長大了"],a:1,e:"「得其所」是得到適合的處所。子產以為魚回到水中自在悠游，替牠高興。"},
+  {q:"校人說「孰謂子產智？」，表現出校人什麼樣的心態？",o:["對子產十分佩服","自以為聰明，得意騙過了子產","擔心被發現而害怕","對自己的行為感到後悔"],a:1,e:"「誰說子產聰明？」是在嘲笑子產，也顯示校人得意於自己的謊言。"}
+ ],
+ s9:[
+  {q:"「則凍餒其妻子」的「餒」，意思是什麼？",o:["氣餒","飢餓","寒冷","生病"],a:1,e:"「凍餒」是又冷又餓。「餒」是飢餓；現代「氣餒」的餒是失去勇氣，意思不同。"},
+  {q:"「士師不能治士」，齊宣王說「已之」，意思是什麼？",o:["原諒他","罷免他","已經處理了","稱讚他"],a:1,e:"「已」是停止，引申為罷免、撤職。"},
+  {q:"孟子第三問「四境之內不治，則如之何？」，真正追究的是誰？",o:["楚國國君","齊宣王自己","士師","被託付妻兒的朋友"],a:1,e:"治理全國是國君的責任。依照前兩題的邏輯，失職的國君也該被追究，所以齊宣王答不出來。"}
+ ],
+ s10:[
+  {q:"「舍市傍」的「舍」，意思是什麼？",o:["捨棄","宿舍","居住","房舍的主人"],a:2,e:"「舍」在這裡當動詞，是居住。搬去住在市場旁邊。"},
+  {q:"孟母說「此非吾所以居處子也」，意思是什麼？",o:["這裡不是我想住的地方","這裡不是適合讓孩子居住的地方","我不准孩子出去玩","這裡房租太貴"],a:1,e:"「居處子」是讓孩子居住。孟母考慮的是環境對孩子的影響。"},
+  {q:"孟母三次搬家，住處的順序是什麼？",o:["墓地→市場→學宮","市場→墓地→學宮","學宮→市場→墓地","墓地→學宮→市場"],a:0,e:"先住墓旁，再搬到市場旁，最後搬到學宮旁才定居下來。"}
+ ]
+};
+STORIES.forEach(s=>{ s.qs.forEach((q,i)=>q.id=s.id+"a"+i); (BANK_B[s.id]||[]).forEach((q,i)=>q.id=s.id+"b"+i); s.pool=[...s.qs,...(BANK_B[s.id]||[])]; });
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+/* 第一次作答固定用原題（方便老師比較）；重做時換題，優先選上一次沒出現的題目，並打亂選項順序 */
+function buildAttempt(s, retry){
+  if(!retry) return s.qs.map(q=>({...q}));
+  const prev=lsGet("mz_lastqs_"+s.id, s.qs.map(q=>q.id));
+  const fresh=shuffle(s.pool.filter(q=>!prev.includes(q.id))), seen=shuffle(s.pool.filter(q=>prev.includes(q.id)));
+  const pickN=s.qs.length, pick=[...fresh.slice(0,Math.max(pickN-1,1)), ...shuffle([...fresh.slice(Math.max(pickN-1,1)),...seen])].slice(0,pickN);
+  return pick.map(q=>{ const order=shuffle([0,1,2,3]); return {...q, o:order.map(i=>q.o[i]), a:order.indexOf(q.a)}; });
+}
 const LET = ["(A)","(B)","(C)","(D)"];
 const TOTAL_Q = STORIES.reduce((s,x)=>s+x.qs.length,0);
 
@@ -669,15 +733,15 @@ function renderHome(){
 }
 
 /* ===================== 作答 ===================== */
-let showNotes=false, showTrans=false, ptab="text", startAt=0;
+let showNotes=false, showTrans=false, ptab="text", startAt=0, curQs=[], isRetry=false;
 function openStory(id){
   if(!me){showLogin();return}
-  current=STORIES.find(s=>s.id===id); picks=new Array(current.qs.length).fill(null); submitted=false; lastSaved=null; showNotes=false; showTrans=false; ptab="text"; startAt=Date.now();
+  current=STORIES.find(s=>s.id===id); isRetry=!!myRec(id) || lsGet("mz_done_"+id,false); curQs=buildAttempt(current,isRetry); lsSet("mz_lastqs_"+id,curQs.map(q=>q.id)); picks=new Array(curQs.length).fill(null); submitted=false; lastSaved=null; showNotes=false; showTrans=false; ptab="text"; startAt=Date.now();
   view="quiz"; render(); renderQuiz(); window.scrollTo(0,0);
 }
 function renderQuiz(){
-  const s=current, idx=STORIES.indexOf(s), n=s.qs.length;
-  const correct = submitted ? s.qs.reduce((c,q,i)=>c+(picks[i]===q.a?1:0),0) : 0;
+  const s=current, idx=STORIES.indexOf(s), n=curQs.length;
+  const correct = submitted ? curQs.reduce((c,q,i)=>c+(picks[i]===q.a?1:0),0) : 0;
   let res="";
   if(submitted){
     const msgs = correct===n?"全對！孟子都要點頭稱讚。":correct>=n-1?"很不錯，看看錯的那題解析。":"再讀一次原文，對照白話大意再挑戰。";
@@ -686,9 +750,9 @@ function renderQuiz(){
     else if(lastSaved==="local") saved="✓ 已存在這台裝置（本機模式）";
     else if(lastSaved==="fail") saved="無法直接存入班級成績，請把下面的成績碼傳給老師：";
     const codeBox = lastSaved==="fail" ? `<div class="code" id="codeBox">${esc(makeCode())}</div><div class="actions" style="margin-top:8px"><button class="btn ghost" style="color:#fff;border-color:#fff;padding:6px 14px" id="copyCode">複製成績碼</button></div>` : "";
-    res = `<div class="result"><div class="big">${correct}<small> / ${n}</small></div><div class="msg"><div>${msgs}</div><div class="saved">${saved||"儲存中…"}</div>${codeBox}</div></div>`;
+    res = `<div class="result"><div class="big">${correct}<small> / ${n}</small></div><div class="msg"><div>${msgs}</div><div class="saved">${saved||"儲存中…"}</div>${codeBox}</div><button class="btn" style="background:#fff;color:var(--ink)" id="doneTop">✓ 完成</button></div>`;
   }
-  const qsHtml = s.qs.map((q,i)=>{
+  const qsHtml = curQs.map((q,i)=>{
     const opts=q.o.map((t,j)=>{
       let cls="opt"; if(picks[i]===j)cls+=" sel";
       if(submitted){ if(j===q.a)cls+=" right"; else if(picks[i]===j)cls+=" wrong"; }
@@ -701,7 +765,7 @@ function renderQuiz(){
   const answered=picks.filter(p=>p!==null).length;
   const next = STORIES[idx+1];
   const actions = submitted
-    ? `<div class="actions"><button class="btn ghost" id="retry">再做一次</button>${next?`<button class="btn" id="nextBtn">下一則：${next.title} →</button>`:`<button class="btn" id="toScores">看班級成績 →</button>`}</div>`
+    ? `<div class="actions"><button class="btn red" id="doneBtn">✓ 完成，回到篇章</button><button class="btn ghost" id="retry">再挑戰一次（換新題目）</button>${next?`<button class="btn ghost" id="nextBtn">下一則：${next.title} →</button>`:`<button class="btn ghost" id="toScores">看班級成績 →</button>`}</div>`
     : `<div class="actions"><button class="btn red" id="submitBtn" ${answered<n?"disabled":""}>交卷</button><span class="hint">${answered<n?`還有 ${n-answered} 題未作答`:"全部作答完成"}</span></div>`;
   $("viewQuiz").innerHTML = `
     <button class="back" id="backBtn">← 回到篇章</button>
@@ -723,7 +787,7 @@ function renderQuiz(){
       </article>
       <div class="qs">
         ${res}
-        <p class="lead">閱讀左方〈${s.title}〉，回答第 1～${n} 題：</p>
+        <p class="lead">閱讀左方〈${s.title}〉，回答第 1～${n} 題：${isRetry?"<b style=\"color:var(--red)\">（再挑戰：題目和選項順序已更換）</b>":""}</p>
         ${qsHtml}
         ${actions}
       </div>
@@ -736,6 +800,8 @@ function renderQuiz(){
   document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(submitted)return; picks[+b.dataset.q]=+b.dataset.o; renderQuiz(); });
   if($("submitBtn"))$("submitBtn").onclick=submit;
   if($("retry"))$("retry").onclick=()=>openStory(s.id);
+  if($("doneBtn"))$("doneBtn").onclick=()=>go("home");
+  if($("doneTop"))$("doneTop").onclick=()=>go("home");
   if($("nextBtn"))$("nextBtn").onclick=()=>openStory(next.id);
   if($("toScores"))$("toScores").onclick=()=>go("scores");
   if($("copyCode"))$("copyCode").onclick=async e=>{try{await navigator.clipboard.writeText(makeCode());e.target.textContent="已複製！"}catch(err){e.target.textContent="請長按上方文字複製"}};
@@ -747,14 +813,15 @@ function makeCode(){
   return "MZ1."+btoa(unescape(encodeURIComponent(JSON.stringify(o))));
 }
 async function submit(){
-  const s=current, n=s.qs.length;
-  const score=s.qs.reduce((c,q,i)=>c+(picks[i]===q.a?1:0),0);
+  const s=current, n=curQs.length;
+  lsSet("mz_done_"+s.id,true);
+  const score=curQs.reduce((c,q,i)=>c+(picks[i]===q.a?1:0),0);
   const id=keyOf(me.cls,me.seat,s.id), old=records.find(r=>r.id===id);
   const rec = {
     id, cls:me.cls, seat:me.seat, name:me.name, story:s.id, total:n,
     best: old?Math.max(old.best,score):score,
     attempts: (old?old.attempts:0)+1,
-    firstAns: old&&Array.isArray(old.firstAns)?old.firstAns:picks.slice(),
+    firstAns: old&&Array.isArray(old.firstAns)?old.firstAns:(isRetry?[]:picks.slice()),
     lastAns: picks.slice(), ts: Date.now(),
     firstTs: old&&old.firstTs?old.firstTs:Date.now(),
     log: [...(old&&Array.isArray(old.log)?old.log:[]), {ts:Date.now(), dur:Math.round((Date.now()-startAt)/1000), sc:score, ans:picks.slice()}].slice(-20)
@@ -838,7 +905,7 @@ function renderScores(){
   // 易錯題（第一次作答）
   const hard=[];
   STORIES.forEach(s=>{
-    const xs=rs.filter(r=>r.story===s.id&&Array.isArray(r.firstAns)); if(xs.length<1)return;
+    const xs=rs.filter(r=>r.story===s.id&&Array.isArray(r.firstAns)&&r.firstAns.length); if(xs.length<1)return;
     s.qs.forEach((q,i)=>{
       const wrong=xs.filter(r=>r.firstAns[i]!==q.a);
       const cnt=[0,0,0,0]; wrong.forEach(r=>{if(r.firstAns[i]!=null)cnt[r.firstAns[i]]++});
